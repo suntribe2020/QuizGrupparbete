@@ -23,7 +23,7 @@ public class QuestionDatabase {
 
     private String[] musicRightAnswers = {"Deep Purple", "Michael Jackson", "1983", "Marshall Mathers"};
 
-    //-----------------------------------------------------------------------
+    //comment---------------------------------------------------------------------
 
     private String[] filmQuestions = {"What is the name of the leading actor in the movie 'Interstellar'?",
             "Fill in the blank: Cobra ___?"};
