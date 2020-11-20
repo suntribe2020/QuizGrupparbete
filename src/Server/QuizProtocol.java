@@ -19,29 +19,27 @@ public class QuizProtocol {
     private int counter = 0;
 
     QuestionDatabase questionDatabase = new QuestionDatabase();
+    ArrayList<String> category = questionDatabase.pickACategory();
 
     public String getInput(String input) {
         String theOutput = null;
 
-        ArrayList<String> category = questionDatabase.pickACategory();
-
-        while (true) {
-            if (state == WAITING || state == SENT_ANSWER) {
-                theOutput = questionDatabase.getMusicQuestions()[counter] + " Alternatives are: " +
-                        questionDatabase.getMusicAlternatives()[counter];
+        if (state == WAITING || state == SENT_ANSWER) {
+            theOutput = questionDatabase.getMusicQuestions()[counter] + " Alternatives are: " +
+                    questionDatabase.getMusicAlternatives()[counter];
+            state = SENT_QUESTION;
+        } else if (state == SENT_QUESTION) {
+            if (input.equalsIgnoreCase(questionDatabase.getMusicRightAnswers()[counter])) {
+                theOutput = "You answered correctly!";
                 state = SENT_QUESTION;
-            } else if (state == SENT_QUESTION) {
-                if (input.equalsIgnoreCase(questionDatabase.getMusicRightAnswers()[counter])) {
-                    theOutput = "You answered correctly!";
-                    state = SENT_QUESTION;
-                } else {
-                    theOutput = "You answered wrong!";
-                    state = SENT_QUESTION;
-                }
-                state = SENT_ANSWER;
-                counter++;
+            } else {
+                theOutput = "You answered wrong!";
+                state = SENT_QUESTION;
             }
-            return theOutput;
+            state = SENT_ANSWER;
+            counter++;
         }
+        return theOutput;
     }
 }
+
