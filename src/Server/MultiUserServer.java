@@ -15,9 +15,22 @@ import java.net.Socket;
 public class MultiUserServer extends Thread {
 
     private final Socket clientSocket;
+    char mark;
+    ServerSideGame game;
+    MultiUserServer opponent;
 
-    public MultiUserServer(Socket clientSocket) {
+    public MultiUserServer(Socket clientSocket, char mark,  ServerSideGame game) {
         this.clientSocket = clientSocket;
+        this.mark = mark;
+        this.game = game;
+    }
+
+    public void setOpponent (MultiUserServer opponent) {
+        this.opponent = opponent;
+    }
+
+    public MultiUserServer getOpponent () {
+        return opponent;
     }
 
     public void run(){
