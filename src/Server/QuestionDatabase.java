@@ -2,13 +2,6 @@ package Server;
 
 import java.util.ArrayList;
 
-/**
- * Created by Katri Vidén
- * Date: 2020-11-17
- * Time: 10:16
- * Project: QuizGrupparbete
- * Copyright: MIT
- */
 public class QuestionDatabase {
 
     private String[] musicQuestions = {"Which band sings the song 'Smoke On The Water'?",

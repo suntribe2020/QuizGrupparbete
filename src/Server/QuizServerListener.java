@@ -1,48 +1,34 @@
 package Server;
 
-import Server.MultiUserServer;
-
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
-/**
- * Created by Katri Vidén
- * Date: 2020-11-17
- * Time: 10:14
- * Project: QuizGrupparbete
- * Copyright: MIT
- */
 public class QuizServerListener {
+    static Player playerToStart;
+    static Player playerToWait;
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(54448);
         System.out.println("Quizkampen server is running");
         try {
             while (true) {
-                ServerSideGame game = new ServerSideGame();
-                MultiUserServer playerX
-                        = new MultiUserServer(serverSocket.accept(), 'X', game);
-                System.out.println("Player X connected");
-                MultiUserServer playerY
-                        = new MultiUserServer(serverSocket.accept(), 'Y', game);
+                playerToStart = new Player(serverSocket.accept(), '1');
+                playerToStart.writeToClient("Welcome player" + playerToStart.playerSignature + " You are now waiting for another " +
+                        "player");
+                System.out.println("Player 1 connected");
+                playerToWait
+                        = new Player(serverSocket.accept(), '2');
                 System.out.println("Player Y connected");
-                playerX.setOpponent(playerY);
-                playerY.setOpponent(playerX);
-                game.currentPlayer = playerX;
-                playerX.start();
-                playerY.start();
+                playerToWait.writeToClient("Welcome player" + playerToWait.playerSignature + " You are now waiting for the first " +
+                        "player to choose a category and answer the questions");
 
-                /*
-                final Socket socketToClient = serverSocket.accept();
-                MultiUserServer multiUserServer =
-                        new MultiUserServer(socketToClient);
-                multiUserServer.start();
-
-                 */
+                Game game = new Game(playerToStart, playerToWait);
+                game.start();
             }
         } finally {
             serverSocket.close();
         }
     }
+
+
 }
