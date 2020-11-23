@@ -45,16 +45,16 @@ public class Player extends Thread {
                     System.out.println("ValidMOOOVE");
                     if (command.startsWith("Musik")) {
                         questionIndex = Integer.parseInt(command.substring(5));
-                        socketOutput.println(questionDatabase.getMusicQuestions()[questionIndex]);
+                        socketOutput.println(questionDatabase.getMusicQuestions().get(questionIndex));
                     } else if (command.startsWith("Spel")) {
                         questionIndex = Integer.parseInt(command.substring(4));
-                        socketOutput.println(questionDatabase.getGameQuestions()[questionIndex]);
+                        socketOutput.println(questionDatabase.getGameQuestions().get(questionIndex));
                     } else if (command.startsWith("Film")) {
                         questionIndex = Integer.parseInt(command.substring(4));
-                        socketOutput.println(questionDatabase.getFilmQuestions()[questionIndex]);
+                        socketOutput.println(questionDatabase.getFilmQuestions().get(questionIndex));
                     } else if (command.startsWith("Sport")) {
                         questionIndex = Integer.parseInt(command.substring(5));
-                        socketOutput.println(questionDatabase.getSportQuestions()[questionIndex]);
+                        socketOutput.println(questionDatabase.getSportQuestions().get(questionIndex));
                     }
                 }
             }
