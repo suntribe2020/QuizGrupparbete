@@ -1,22 +1,25 @@
 package Server;
 
+import Server.properties.PropertiesHandler;
+
 import java.io.IOException;
+import java.util.Properties;
 
 public class Game extends Thread {
-    //Change to property file
-    private final static int NUMBER_OF_ROUNDS = 3;
-    private final static int NUMBER_OF_QUESTIONS = 4;
+    private int numberOfRounds = 0;
+    private int numberOfQuestions = 0;
     private Player playerToStart;
     private Player playerToWait;
 
     public Game(Player playerToStart, Player playerToWait) {
         this.playerToStart = playerToStart;
         this.playerToWait = playerToWait;
+        loadProperties();
     }
 
     @Override
     public void run() {
-        for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {
+        for (int i = 0; i < numberOfRounds; i++) {
             try {
                 playRound();
             } catch (IOException e) {
@@ -60,5 +63,11 @@ public class Game extends Thread {
         player.writeToClient("Question 4: How are your family?");
         String fourthAnswerPlayer = player.readFromClient();
         player.writeToClient("Good job!");
+    }
+
+    private void loadProperties() {
+        Properties properties = PropertiesHandler.getProperties();
+        numberOfRounds = Integer.parseInt(properties.getProperty("NUMBER_OF_ROUNDS", "3"));
+        numberOfQuestions = Integer.parseInt(properties.getProperty("NUMBER_OF_QUESTIONS", "4"));
     }
 }
