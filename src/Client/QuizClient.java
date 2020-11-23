@@ -211,8 +211,8 @@ public class QuizClient extends JFrame implements ActionListener {
             */
 
         }
-
-    }
+        }
+        public void nextQuestion(){}
     private void setUpSocketCommunication() {
         try {
             this.socket = new Socket(this.serverAdress, this.portNr);
