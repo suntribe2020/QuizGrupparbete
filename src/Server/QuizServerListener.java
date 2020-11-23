@@ -18,7 +18,7 @@ public class QuizServerListener {
                 System.out.println("Player 1 connected");
                 playerToWait
                         = new Player(serverSocket.accept(), '2');
-                System.out.println("Player Y connected");
+                System.out.println("Player 2 connected");
                 playerToWait.writeToClient("Welcome player" + playerToWait.playerSignature + " You are now waiting for the first " +
                         "player to choose a category and answer the questions");
 

@@ -3,9 +3,9 @@ package Server;
 import java.io.IOException;
 
 public class Game extends Thread {
-//sss
     //Change to property file
     private final static int NUMBER_OF_ROUNDS = 3;
+    private final static int NUMBER_OF_QUESTIONS = 4;
     private Player playerToStart;
     private Player playerToWait;
 

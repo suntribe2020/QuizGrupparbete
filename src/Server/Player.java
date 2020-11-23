@@ -33,6 +33,7 @@ public class Player extends Thread {
         socketOutput.println("OPPONENT_MOVED " + location);
     }
 
+
     @Override
     public void run() {
         try {
@@ -66,6 +67,7 @@ public class Player extends Thread {
             }
         }
     }
+
     private void setUpSocketCommunication() {
         try {
             generateSocketReader();
