@@ -1,6 +1,8 @@
 package Server;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Katri Vidén
@@ -11,17 +13,8 @@ import java.util.ArrayList;
  */
 public class QuestionDatabase {
 
-    private String[] musicQuestions = {"Which band sings the song 'Smoke On The Water'?",
-            "What is the name of the artist with the hit song 'Smooth Criminal'?",
-            "When did Madonna release her first album?",
-            "What is Eminems real name?"};
+    private static List<Question> musicQuestions = new ArrayList<>();
 
-    private String[] musicAlternatives = {"Beatles, Deep Purple, Aerosmith, Black Sabbath",
-            "Cher, Madonna, Michael Jackson, Janet Jackson",
-            "1979, 1980, 1983, 1987",
-            "Slim Shady, Marshall Matthews, Matthew Mathers, Marshall Mathers"};
-
-    private String[] musicRightAnswers = {"Deep Purple", "Michael Jackson", "1983", "Marshall Mathers"};
 
     //-----------------------------------------------------------------------
 
@@ -66,6 +59,28 @@ public class QuestionDatabase {
     private String[] sportRightAnswers = {"Manchester United", "Basketball", "Canada", "Sweden"};
 
     public QuestionDatabase() {
+        musicQuestions.add(new Question("Which band sings the song 'Smoke On The Water'?",
+                "Deep Purple",
+                "Beatles",
+                "Aerosmith",
+                "Black Sabbath"));
+        musicQuestions.add(new Question("What is the name of the artist with the hit song 'Smooth Criminal'?",
+                "Michael Jackson",
+                "Cher",
+                "Madonna",
+                "Janet Jackson"));
+        musicQuestions.add(new Question("When did Madonna release her first album?",
+                "1983",
+                "1979",
+                "1980",
+                "1987"));
+        musicQuestions.add(new Question("What is Eminems real name?",
+                "Marshall Mathers",
+                "Slim Shady",
+                "Marshall Matthews",
+                "Matthew Mathers"));
+
+        Collections.shuffle(musicQuestions);
     }
 
     public ArrayList<String> pickACategory() {
