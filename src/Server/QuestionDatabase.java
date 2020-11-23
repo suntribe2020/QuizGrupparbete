@@ -125,17 +125,6 @@ public class QuestionDatabase {
                 "Matthew Mathers"));
     }
 
-    public ArrayList<String> pickACategory() {
-        ArrayList<String> categories = new ArrayList<>();
-
-        categories.add("Music");
-        categories.add("Film");
-        categories.add("Games");
-        categories.add("Sport");
-
-        return categories;
-    }
-
     public static List<Question> getMusicQuestions() {
         return musicQuestions;
     }
