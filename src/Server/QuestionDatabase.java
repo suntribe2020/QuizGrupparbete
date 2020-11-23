@@ -18,7 +18,6 @@ public class QuestionDatabase {
     private static List<Question> gameQuestions = new ArrayList<>();
     private static List<Question> sportQuestions = new ArrayList<>();
 
-
     public QuestionDatabase() {
 
         createMusicQuestions();
