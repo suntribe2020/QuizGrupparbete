@@ -1,6 +1,7 @@
 package Server;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Game extends Thread {
     //Change to property file
@@ -9,6 +10,8 @@ public class Game extends Thread {
     private Player playerToStart;
     private Player playerToWait;
 
+    public List<Question> currentCategory;
+
     public Game(Player playerToStart, Player playerToWait) {
         this.playerToStart = playerToStart;
         this.playerToWait = playerToWait;
@@ -16,7 +19,8 @@ public class Game extends Thread {
 
     @Override
     public void run() {
-        for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {
+        //for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {
+        while (true) {
             try {
                 playRound();
             } catch (IOException e) {
@@ -25,10 +29,34 @@ public class Game extends Thread {
         }
     }
 
-    private void playRound() throws IOException {
-        String result = initiateRound(playerToStart, "Please choose a category: Music, Film, Games, Sport");
-        playQuestionRound(playerToStart);
 
+    private void playRound() throws IOException {
+        boolean isValidChoice = false;
+        String result = null;
+
+        while (!isValidChoice) {
+            result = initiateRound(playerToStart, "Please choose a category: Music, Film, Games, Sport");
+            if (result.equalsIgnoreCase("Music")) {
+                currentCategory = QuestionDatabase.getMusicQuestions();
+                isValidChoice = true;
+            } else if (result.equalsIgnoreCase("Film")) {
+                currentCategory = QuestionDatabase.getFilmQuestions();
+                isValidChoice = true;
+            } else if (result.equalsIgnoreCase("Games")) {
+                currentCategory = QuestionDatabase.getGameQuestions();
+                isValidChoice = true;
+            } else if (result.equalsIgnoreCase("Sport")) {
+                currentCategory = QuestionDatabase.getSportQuestions();
+                isValidChoice = true;
+            } else {
+                initiateRound(playerToStart, "Choose a valid option");
+                isValidChoice = false;
+            }
+
+
+        }
+
+       playQuestionRound(playerToStart);
 
         //player two round
         String welcomeMessage = "Chosen categories to play was: " + result + " Are you ready to start?";
