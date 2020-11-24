@@ -3,9 +3,9 @@ package Server;
 import java.io.IOException;
 
 public class Game extends Thread {
-    //Change to property file
-    private final static int NUMBER_OF_ROUNDS = 3;
-    private final static int NUMBER_OF_QUESTIONS = 4;
+
+    private final int numberOfRounds = Database.getNumberOfRounds();
+    private final int numberOfQuestions = Database.getNumberOfQuestions();
     private Player playerToStart;
     private Player playerToWait;
 
@@ -16,7 +16,7 @@ public class Game extends Thread {
 
     @Override
     public void run() {
-        for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {
+        for (int i = 0; i < numberOfRounds; i++) {
             try {
                 playRound();
             } catch (IOException e) {
