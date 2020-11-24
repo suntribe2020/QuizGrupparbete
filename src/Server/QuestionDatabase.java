@@ -13,13 +13,17 @@ import java.util.List;
  */
 public class QuestionDatabase {
 
-    private static List<Question> musicQuestions = new ArrayList<>();
-    private static List<Question> filmQuestions = new ArrayList<>();
-    private static List<Question> gameQuestions = new ArrayList<>();
-    private static List<Question> sportQuestions = new ArrayList<>();
+    private  List<Question> musicQuestions;
+    private  List<Question> filmQuestions;
+    private  List<Question> gameQuestions;
+    private  List<Question> sportQuestions;
 
 
     public QuestionDatabase() {
+        musicQuestions = new ArrayList<>();
+        filmQuestions = new ArrayList<>();
+        gameQuestions = new ArrayList<>();
+        sportQuestions = new ArrayList<>();
 
         createMusicQuestions();
         createFilmQuestions();
@@ -125,19 +129,19 @@ public class QuestionDatabase {
                 "Matthew Mathers"));
     }
 
-    public static List<Question> getMusicQuestions() {
+    public  List<Question> getMusicQuestions() {
         return musicQuestions;
     }
 
-    public static List<Question> getFilmQuestions() {
+    public  List<Question> getFilmQuestions() {
         return filmQuestions;
     }
 
-    public static List<Question> getGameQuestions() {
+    public  List<Question> getGameQuestions() {
         return gameQuestions;
     }
 
-    public static List<Question> getSportQuestions() {
+    public List<Question> getSportQuestions() {
         return sportQuestions;
     }
 
