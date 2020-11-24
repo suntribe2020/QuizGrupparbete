@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 public class QuizClient extends JFrame implements ActionListener {
 
-
     JFrame frame = new JFrame();
     JTextField textfield = new JTextField();
     JTextArea textarea = new JTextArea();
@@ -22,7 +21,6 @@ public class QuizClient extends JFrame implements ActionListener {
     JButton button2 = new JButton();
     JButton button3 = new JButton();
     JButton button4 = new JButton();
-
 
     JLabel answer_label1 = new JLabel();
     JLabel answer_label2 = new JLabel();

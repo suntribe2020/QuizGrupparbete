@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Julia Wigenstedt
- * Date: 2020-11-23
- * Time: 16:06
- * Project: GrupparbeteActual
- * Copyright: MIT
- */
 public class Question {
     private String question;
     private String answer;

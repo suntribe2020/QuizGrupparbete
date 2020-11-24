@@ -13,14 +13,13 @@ public class Player extends Thread {
     Socket socket;
     BufferedReader socketInput;
     PrintWriter socketOutput;
-    QuestionDatabase questionDatabase = new QuestionDatabase();
-
 
     public Player(Socket socket, char playerSignature) {
         this.socket = socket;
         this.playerSignature = playerSignature;
         setUpSocketCommunication();
     }
+
     public void setOpponent(Player opponent) {
         this.opponent = opponent;
     }
@@ -33,7 +32,6 @@ public class Player extends Thread {
         socketOutput.println("OPPONENT_MOVED " + location);
     }
 
-
     @Override
     public void run() {
         try {
@@ -45,16 +43,16 @@ public class Player extends Thread {
                     System.out.println("ValidMOOOVE");
                     if (command.startsWith("Musik")) {
                         questionIndex = Integer.parseInt(command.substring(5));
-                        socketOutput.println(questionDatabase.getMusicQuestions().get(questionIndex));
+                        socketOutput.println(Database.getMusicQuestions().get(questionIndex));
                     } else if (command.startsWith("Spel")) {
                         questionIndex = Integer.parseInt(command.substring(4));
-                        socketOutput.println(questionDatabase.getGameQuestions().get(questionIndex));
+                        socketOutput.println(Database.getGameQuestions().get(questionIndex));
                     } else if (command.startsWith("Film")) {
                         questionIndex = Integer.parseInt(command.substring(4));
-                        socketOutput.println(questionDatabase.getFilmQuestions().get(questionIndex));
+                        socketOutput.println(Database.getFilmQuestions().get(questionIndex));
                     } else if (command.startsWith("Sport")) {
                         questionIndex = Integer.parseInt(command.substring(5));
-                        socketOutput.println(questionDatabase.getSportQuestions().get(questionIndex));
+                        socketOutput.println(Database.getSportQuestions().get(questionIndex));
                     }
                 }
             }

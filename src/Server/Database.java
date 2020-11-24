@@ -1,38 +1,35 @@
 package Server;
 
+import Server.properties.PropertiesHandler;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Katri Vidén
- * Date: 2020-11-17
- * Time: 10:16
- * Project: QuizGrupparbete
- * Copyright: MIT
- */
-public class QuestionDatabase {
+public class Database {
+
+    private static int NUMBER_OF_QUESTIONS = 0;
+    private static int NUMBER_OF_ROUNDS = 0;
 
     private static List<Question> musicQuestions = new ArrayList<>();
     private static List<Question> filmQuestions = new ArrayList<>();
     private static List<Question> gameQuestions = new ArrayList<>();
     private static List<Question> sportQuestions = new ArrayList<>();
 
-    public QuestionDatabase() {
+    public static void populate() {
+        PropertiesHandler.loadProperties();
 
         createMusicQuestions();
         createFilmQuestions();
         createGameQuestions();
         createSportQuestions();
-
         Collections.shuffle(musicQuestions);
         Collections.shuffle(filmQuestions);
         Collections.shuffle(gameQuestions);
         Collections.shuffle(sportQuestions);
-
     }
 
-    private void createSportQuestions() {
+    private static void createSportQuestions() {
         sportQuestions.add(new Question("Which team has won the most Premier League titles?",
                 "Manchester United",
                 "Liverpool FC",
@@ -55,7 +52,7 @@ public class QuestionDatabase {
                 "USA"));
     }
 
-    private void createGameQuestions() {
+    private static void createGameQuestions() {
         gameQuestions.add(new Question("How many pieces of triforce does Link have to collect in 'The Legend of Zelda'?",
                 "3",
                 "2",
@@ -78,7 +75,7 @@ public class QuestionDatabase {
                 "PickSmash"));
     }
 
-    private void createFilmQuestions() {
+    private static void createFilmQuestions() {
         filmQuestions.add(new Question("What is the name of the leading actor in the movie 'Interstellar'?",
                 "Matthew McConaughey",
                 "Brad Pitt",
@@ -101,7 +98,7 @@ public class QuestionDatabase {
                 "Kevin Hart"));
     }
 
-    private void createMusicQuestions() {
+    private static void createMusicQuestions() {
         musicQuestions.add(new Question("Which band sings the song 'Smoke On The Water'?",
                 "Deep Purple",
                 "Beatles",
@@ -138,6 +135,22 @@ public class QuestionDatabase {
 
     public static List<Question> getSportQuestions() {
         return sportQuestions;
+    }
+
+    public static int getNumberOfQuestions() {
+        return NUMBER_OF_QUESTIONS;
+    }
+
+    public static void setNumberOfQuestions(int numberOfQuestions) {
+        NUMBER_OF_QUESTIONS = numberOfQuestions;
+    }
+
+    public static int getNumberOfRounds() {
+        return NUMBER_OF_ROUNDS;
+    }
+
+    public static void setNumberOfRounds(int numberOfRounds) {
+        NUMBER_OF_ROUNDS = numberOfRounds;
     }
 
 }

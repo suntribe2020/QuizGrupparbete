@@ -1,16 +1,14 @@
 package Server;
 
-import Server.properties.PropertiesHandler;
-
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.Properties;
 
 public class QuizServerListener {
     static Player playerToStart;
     static Player playerToWait;
 
     public static void main(String[] args) throws IOException {
+        Database.populate();
         try (ServerSocket serverSocket = new ServerSocket(54448)) {
             System.out.println("Quizkampen server is running");
             while (true) {
