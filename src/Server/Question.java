@@ -27,15 +27,16 @@ public class Question {
         this.wrongAnswer3=wrongAnswer3;
 
         answers = new ArrayList<>();
-        addToAnswersAndShuffle();
+        addToAnswers();
+        shuffleAnswers();
     }
 
-    public void addToAnswersAndShuffle(){
+    public void addToAnswers(){
+
         answers.add(answer);
         answers.add(wrongAnswer1);
         answers.add(wrongAnswer2);
         answers.add(wrongAnswer3);
-        Collections.shuffle(answers);
     }
 
     public List<String> getAnswers() {
@@ -60,5 +61,20 @@ public class Question {
 
     public String getWrongAnswer3() {
         return wrongAnswer3;
+    }
+    public void shuffleAnswers(){
+        Collections.shuffle(answers);
+    }
+
+    public String printQuestion(){
+        String output = question + "\n";
+        for (int i = 0; i < answers.size(); i++) {
+            if (i == answers.size() - 1) {
+                output += (i + 1) + ": " + answers.get(i);
+            } else {
+                output += (i + 1) + ": " + answers.get(i) + "\n";
+            }
+        }
+        return output;
     }
 }
