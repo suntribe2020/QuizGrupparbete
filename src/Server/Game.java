@@ -35,7 +35,6 @@ public class Game extends Thread {
         boolean isValidChoice = false;
         String result = null;
 
-
         while (!isValidChoice) {
             result = initiateRound(playerToStart, "Please choose a category: Music, Film, Games, Sport");
             if (result.equalsIgnoreCase("Music")) {
