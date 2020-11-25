@@ -13,6 +13,8 @@ import java.util.Scanner;
 
 public class QuizClient extends JFrame implements ActionListener {
 
+    String currentState = "";
+
     JFrame frame = new JFrame();
     JTextField textfield = new JTextField();
     JTextArea textarea = new JTextArea();
@@ -70,29 +72,29 @@ public class QuizClient extends JFrame implements ActionListener {
         button1.setBackground(new Color(186, 179, 179));
         button1.setFocusable(false);
         button1.addActionListener(this);
-        button1.setText("Musik");
+        //button1.setText("Musik");
 
         button2.setBounds(315, 100, 300, 250);
         button2.setFont(new Font("Geeza Pro", Font.BOLD, 35));
         button2.setBackground(new Color(186, 179, 179));
         button2.setFocusable(false);
         button2.addActionListener(this);
-        button2.setText("Spel");
+        //button2.setText("Spel");
 
         button3.setBounds(15, 350, 300, 250);
         button3.setFont(new Font("Geeza Pro", Font.BOLD, 35));
         button3.setBackground(new Color(186, 179, 179));
         button3.setFocusable(false);
         button3.addActionListener(this);
-        button3.setText("Film");
+        //button3.setText("Film");
 
         button4.setBounds(315, 350, 300, 250);
         button4.setFont(new Font("Geeza Pro", Font.BOLD, 35));
         button4.setBackground(new Color(186, 179, 179));
         button4.setFocusable(false);
         button4.addActionListener(this);
-        button4.setText("Sport");
-
+        //button4.setText("Sport");
+        //displayCategories();
 
         frame.add(button1);
         frame.add(button2);
@@ -107,9 +109,27 @@ public class QuizClient extends JFrame implements ActionListener {
         Scanner scanner = new Scanner(System.in);
         String message;
         try {
+            if (readFromServer().equals("Welcome player1 You are now waiting for another player")){
+                textfield.setText("waiting for player 2");
+            }
+            if (readFromServer().equals("CAT")){
+                currentState = "CAT";
+                displayCategories();
+            }
+            if (readFromServer().equals("QUE")){
+                currentState = "QUE";
+                textfield.setText(readFromServer());
+                button1.setText(readFromServer());
+                button2.setText(readFromServer());
+                button3.setText(readFromServer());
+                button4.setText(readFromServer());
+            }
+
+            System.out.println(readFromServer());
+
             System.out.println("Started client");
-            String welcomeMesage = readFromServer();
-            System.out.println(welcomeMesage);
+            String welcomeMessage = readFromServer();
+            System.out.println(welcomeMessage);
             while (true) {
                 String firstMessage = readFromServer();
                 System.out.println(firstMessage);
@@ -151,7 +171,21 @@ public class QuizClient extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == button1 || e.getSource() == button2 ||
+        //if (currentState.equals("CAT")){
+            if (e.getSource() == button1){writeToServer(button1.getText());}
+            if (e.getSource() == button2){writeToServer(button2.getText());}
+            if (e.getSource() == button3){writeToServer(button3.getText());}
+            if (e.getSource() == button4){writeToServer(button4.getText());}
+            //}
+        /*else if(currentState.equals("QUE")){
+            if (e.getSource() == button1){writeToServer(button1.getText());}
+            if (e.getSource() == button2){writeToServer(button2.getText());}
+            if (e.getSource() == button3){writeToServer(button3.getText());}
+            if (e.getSource() == button4){writeToServer(button4.getText());}
+            }
+        */
+
+        /*if (e.getSource() == button1 || e.getSource() == button2 ||
                 e.getSource() == button3 || e.getSource() == button4) {
             if (e.getSource() == button1) {
                 textfield.setText("Kategori: Musik");
@@ -169,7 +203,8 @@ public class QuizClient extends JFrame implements ActionListener {
                 textfield.setText("Kategori: Sport");
                 socketOutput.println(button4.getText() + questionIndex);
                 this.questionIndex += 1;
-            }
+            }*/
+
             /*
             textarea.setBounds(0, 50, 650, 50);
             textarea.setLineWrap(true);
@@ -208,7 +243,7 @@ public class QuizClient extends JFrame implements ActionListener {
 
             */
 
-        }
+
 
     }
     private void setUpSocketCommunication() {
@@ -236,5 +271,12 @@ public class QuizClient extends JFrame implements ActionListener {
 
     public String readFromServer() throws IOException {
         return this.socketInput.readLine();
+    }
+
+    public void displayCategories(){
+        button1.setText("Musik");
+        button2.setText("Spel");
+        button3.setText("Film");
+        button4.setText("Sport");
     }
 }
