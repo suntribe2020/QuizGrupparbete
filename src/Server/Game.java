@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game extends Thread {
-    //Change to property file
-    private final static int NUMBER_OF_ROUNDS = 3;
-    private final static int NUMBER_OF_QUESTIONS = 2;
+
+    private final int numberOfRounds = Database.getNumberOfRounds();
+    private final int numberOfQuestions = Database.getNumberOfQuestions();
     private Player playerToStart;
     private Player playerToWait;
     private boolean isGameOver;
@@ -19,12 +19,11 @@ public class Game extends Thread {
     public Game(Player playerToStart, Player playerToWait) {
         this.playerToStart = playerToStart;
         this.playerToWait = playerToWait;
-        questionDatabase = new QuestionDatabase();
     }
 
     @Override
     public void run() {
-        while(playedRounds<=NUMBER_OF_ROUNDS) {
+        while(playedRounds<=numberOfRounds) {
                 try {
                     playRound();
                 } catch (IOException e) {
@@ -43,15 +42,15 @@ public class Game extends Thread {
             result = initiateRound(playerToStart, "Please choose a category: Music, Film, Games, Sport");
             if (result.equalsIgnoreCase("Music")) {
 
-                currentCategory = questionDatabase.getMusicQuestions();
+                currentCategory = Database.getMusicQuestions();
                 isValidChoice = true;
             } else if (result.equalsIgnoreCase("Film")) {
 
-                currentCategory = questionDatabase.getFilmQuestions();
+                currentCategory = Database.getFilmQuestions();
                 isValidChoice = true;
             } else if (result.equalsIgnoreCase("Games")) {
 
-                currentCategory = questionDatabase.getGameQuestions();
+                currentCategory = Database.getGameQuestions();
                 isValidChoice = true;
             } else if (result.equalsIgnoreCase("Sport")) {
 
