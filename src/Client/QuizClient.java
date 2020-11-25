@@ -1,5 +1,8 @@
 package Client;
 
+import Server.Question;
+import Server.QuestionDatabase;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -39,12 +42,14 @@ public class QuizClient extends JFrame implements ActionListener {
     private BufferedReader socketInput;
     private PrintWriter socketOutput;
     private int questionIndex = 0;
+    private int totalQuestions = 4;
 
     public QuizClient(String serverAdress, int portNr) {
         this.serverAdress = serverAdress;
         this.portNr = portNr;
         setUpGameBoard();
         setUpSocketCommunication();
+        nextQuestion();
     }
 
     private void setUpGameBoard() {
@@ -212,7 +217,16 @@ public class QuizClient extends JFrame implements ActionListener {
 
         }
         }
-        public void nextQuestion(){}
+        public void nextQuestion(){
+            QuestionDatabase questionDatabase = new QuestionDatabase();
+        if (questionIndex>=totalQuestions){
+            result();
+        }else {
+            textfield.setText("Questions" + questionIndex+1);
+            textarea.setText(QuestionDatabase.filmQuestions[questionIndex]);
+        }
+
+        }
     private void setUpSocketCommunication() {
         try {
             this.socket = new Socket(this.serverAdress, this.portNr);
