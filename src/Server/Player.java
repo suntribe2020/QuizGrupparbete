@@ -13,6 +13,8 @@ public class Player extends Thread {
     Socket socket;
     BufferedReader socketInput;
     PrintWriter socketOutput;
+    private int roundScore=0;
+    private int totalScore=0;
 
     public Player(Socket socket, char playerSignature) {
         this.socket = socket;
@@ -31,6 +33,7 @@ public class Player extends Thread {
     public void otherPlayerMoved(int location) {
         socketOutput.println("OPPONENT_MOVED " + location);
     }
+
 
     @Override
     public void run() {
@@ -86,10 +89,26 @@ public class Player extends Thread {
 
     public void writeToClient(String message) {
         this.socketOutput.println(message);
+        socketOutput.flush();
     }
 
     public String readFromClient() throws IOException {
         return this.socketInput.readLine();
     }
 
+    public int getRoundScore() {
+        return roundScore;
+    }
+
+    public void setRoundScore(int score) {
+        this.roundScore = score;
+    }
+
+    public void addToTotalScore(int roundScore) {
+        totalScore += roundScore;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
+    }
 }

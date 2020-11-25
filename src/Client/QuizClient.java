@@ -1,5 +1,7 @@
 package Client;
 
+import Server.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -113,24 +115,17 @@ public class QuizClient extends JFrame implements ActionListener {
             while (true) {
                 String firstMessage = readFromServer();
                 System.out.println(firstMessage);
-
-
                 sendAnswerToServer(scanner);
-                message = readFromServer();
-                System.out.println("Message after first answer is:  " + message);
+                for(int j =0; j<2; j++){
+                for(int i = 0; i<5; i++) {
+                    message = readFromServer();
+                    System.out.println(message);
+                }
                 sendAnswerToServer(scanner);
-                message = readFromServer();
-                System.out.println("Message after second answer is:  " + message);
-                sendAnswerToServer(scanner);
-                message = readFromServer();
-                System.out.println("Message after third answer is:  " + message);
-                sendAnswerToServer(scanner);
-                message = readFromServer();
-                System.out.println("Message after fourth answer is:  " + message);
-                sendAnswerToServer(scanner);
+                }
 
                 String lastMessage = readFromServer();
-                System.out.println("This was the last message for this round:  " + lastMessage);
+                System.out.println("Last message: " + lastMessage);
 
             }
         } finally {

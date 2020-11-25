@@ -1,6 +1,8 @@
 package Server;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game extends Thread {
 
@@ -8,6 +10,10 @@ public class Game extends Thread {
     private final int numberOfQuestions = Database.getNumberOfQuestions();
     private Player playerToStart;
     private Player playerToWait;
+    private boolean isGameOver;
+    private static int playedRounds = 0;
+
+    public List<Question> currentCategory = new ArrayList<>(4);
 
     public Game(Player playerToStart, Player playerToWait) {
         this.playerToStart = playerToStart;
@@ -16,7 +22,7 @@ public class Game extends Thread {
 
     @Override
     public void run() {
-        for (int i = 0; i < numberOfRounds; i++) {
+        while(playedRounds<=numberOfRounds) {
             try {
                 playRound();
             } catch (IOException e) {
@@ -26,9 +32,33 @@ public class Game extends Thread {
     }
 
     private void playRound() throws IOException {
-        String result = initiateRound(playerToStart, "Please choose a category: Music, Film, Games, Sport");
-        playQuestionRound(playerToStart);
+        boolean isValidChoice = false;
+        String result = null;
 
+
+        while (!isValidChoice) {
+            result = initiateRound(playerToStart, "Please choose a category: Music, Film, Games, Sport");
+            if (result.equalsIgnoreCase("Music")) {
+
+                currentCategory = Database.getMusicQuestions();
+                isValidChoice = true;
+            } else if (result.equalsIgnoreCase("Film")) {
+                currentCategory = Database.getFilmQuestions();
+                isValidChoice = true;
+            } else if (result.equalsIgnoreCase("Games")) {
+
+                currentCategory = Database.getGameQuestions();
+                isValidChoice = true;
+            } else if (result.equalsIgnoreCase("Sport")) {
+
+                currentCategory = Database.getSportQuestions();
+                isValidChoice = true;
+            } else {
+                initiateRound(playerToStart, "Choose a valid option");
+            }
+        }
+
+        playQuestionRound(playerToStart);
 
         //player two round
         String welcomeMessage = "Chosen categories to play was: " + result + " Are you ready to start?";
@@ -51,14 +81,55 @@ public class Game extends Thread {
     }
 
     private void playQuestionRound(Player player) throws IOException {
-        player.writeToClient("Question 1: How are you today?");
-        String firstAnswerPlayer = player.readFromClient();
-        player.writeToClient("Question 2: Yesterday was what day?");
-        String secondAnswerPlayer = player.readFromClient();
-        player.writeToClient("Question 3: What is the uindi?");
-        String thirdAnswerPlayer = player.readFromClient();
-        player.writeToClient("Question 4: How are your family?");
-        String fourthAnswerPlayer = player.readFromClient();
-        player.writeToClient("Good job!");
+
+        for(Question q : currentCategory) {
+            System.out.println("Test");
+            System.out.println(q.printQuestion());
+            System.out.println("Test over");
+        }
+
+        for(int i = 0; i<numberOfQuestions; i++) {
+            player.writeToClient(currentCategory.get(i).printQuestion());
+            String answer = player.readFromClient();
+            if (answer.equalsIgnoreCase(currentCategory.get(i).getAnswer())){
+                player.setRoundScore(player.getRoundScore()+1);
+            }
+        }
+
+        player.addToTotalScore(player.getRoundScore());
+
+        if(player.equals(playerToWait)){
+            playedRounds++;
+            if(playedRounds==1) {
+                player.writeToClient("Score this round: " + player.getRoundScore() + ". Oppenent scored: " + playerToStart.getRoundScore());
+//                playerToStart.writeToClient("Your opponent scored:  " + player.getRoundScore());
+            } else {
+                player.writeToClient("Score this round: " + player.getRoundScore() + ". Total score:  " + player.getTotalScore());
+//                playerToStart.writeToClient("Your opponent scored:  " + player.getRoundScore() + ". Their total score:  " + player.getTotalScore());
+            }
+            playerToStart.setRoundScore(0);
+            playerToWait.setRoundScore(0);
+        } else {
+            if(playedRounds==0) {
+                player.writeToClient("Score this round: " + player.getRoundScore() + ". Waiting for opponent to finish round");
+            } else player.writeToClient("Score this round: " + player.getRoundScore() + ". Total score:  " + player.getTotalScore()+ ". Waiting for opponent to finish round");
+        }
+        isGameOver = checkIfGameOver();
+        if(isGameOver) {
+            writeEndMessage(playerToStart, playerToWait);
+            writeEndMessage(playerToWait, playerToStart);
+        }
+    }
+
+    public void writeEndMessage(Player player1, Player player2) {
+        player1.writeToClient("The game has ended. Your score was " + player1.getTotalScore() + ". Your opponent scored: " + player2.getTotalScore());
+    }
+
+    public boolean checkIfGameOver(){
+        return playedRounds == numberOfRounds;
+    }
+
+    public static int getPlayedRounds() {
+        return playedRounds;
     }
 }
