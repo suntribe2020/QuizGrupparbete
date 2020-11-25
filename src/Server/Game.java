@@ -44,7 +44,6 @@ public class Game extends Thread {
                 currentCategory = Database.getMusicQuestions();
                 isValidChoice = true;
             } else if (result.equalsIgnoreCase("Film")) {
-
                 currentCategory = Database.getFilmQuestions();
                 isValidChoice = true;
             } else if (result.equalsIgnoreCase("Games")) {
