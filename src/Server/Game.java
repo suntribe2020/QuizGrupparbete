@@ -31,7 +31,6 @@ public class Game extends Thread {
         }
     }
 
-
     private void playRound() throws IOException {
         boolean isValidChoice = false;
         String result = null;
