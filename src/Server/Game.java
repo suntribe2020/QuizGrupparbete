@@ -99,13 +99,7 @@ public class Game extends Thread {
         }
 
         player.addToTotalScore(player.getRoundScore());
-//        String firstAnswerPlayer = player.readFromClient();
-//        player.writeToClient("Question 2: Yesterday was what day?");
-//        String secondAnswerPlayer = player.readFromClient();
-//        player.writeToClient("Question 3: What is the uindi?");
-//        String thirdAnswerPlayer = player.readFromClient();
-//        player.writeToClient("Question 4: How are your family?");
-//        String fourthAnswerPlayer = player.readFromClient();
+
         if(player.equals(playerToWait)){
             playedRounds++;
             if(playedRounds==1) {
