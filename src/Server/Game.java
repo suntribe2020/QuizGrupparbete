@@ -11,7 +11,6 @@ public class Game extends Thread {
     private Player playerToStart;
     private Player playerToWait;
     private boolean isGameOver;
-    private final QuestionDatabase questionDatabase;
     private static int playedRounds = 0;
 
     public List<Question> currentCategory = new ArrayList<>(4);
@@ -24,13 +23,13 @@ public class Game extends Thread {
     @Override
     public void run() {
         while(playedRounds<=numberOfRounds) {
-                try {
-                    playRound();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                playRound();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+    }
 
 
     private void playRound() throws IOException {
@@ -54,14 +53,14 @@ public class Game extends Thread {
                 isValidChoice = true;
             } else if (result.equalsIgnoreCase("Sport")) {
 
-                currentCategory = questionDatabase.getSportQuestions();
+                currentCategory = Database.getSportQuestions();
                 isValidChoice = true;
             } else {
                 initiateRound(playerToStart, "Choose a valid option");
             }
         }
 
-       playQuestionRound(playerToStart);
+        playQuestionRound(playerToStart);
 
         //player two round
         String welcomeMessage = "Chosen categories to play was: " + result + " Are you ready to start?";
@@ -91,7 +90,7 @@ public class Game extends Thread {
             System.out.println("Test over");
         }
 
-        for(int i = 0; i<NUMBER_OF_QUESTIONS; i++) {
+        for(int i = 0; i<numberOfQuestions; i++) {
             player.writeToClient(currentCategory.get(i).printQuestion());
             String answer = player.readFromClient();
             if (answer.equalsIgnoreCase(currentCategory.get(i).getAnswer())){
@@ -135,7 +134,7 @@ public class Game extends Thread {
     }
 
     public boolean checkIfGameOver(){
-        return playedRounds == NUMBER_OF_ROUNDS;
+        return playedRounds == numberOfRounds;
     }
 
     public static int getPlayedRounds() {
