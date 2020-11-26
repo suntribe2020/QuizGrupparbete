@@ -12,7 +12,7 @@ public class Game extends Thread {
     private Player playerToStart;
     private Player playerToWait;
     private boolean isGameOver;
-    private static int playedRounds = 0;
+    private int playedRounds = 0;
 
     public List<Question> currentCategory = new ArrayList<>(4);
 
@@ -130,7 +130,7 @@ public class Game extends Thread {
         return playedRounds == numberOfRounds;
     }
 
-    public static int getPlayedRounds() {
+    public int getPlayedRounds() {
         return playedRounds;
     }
 }

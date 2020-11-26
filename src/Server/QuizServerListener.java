@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public class QuizServerListener {
-    static Player playerToStart;
-    static Player playerToWait;
+    Player playerToStart;
+    Player playerToWait;
 
-    public static void main(String[] args) throws IOException {
+    public QuizServerListener() throws IOException {
         Database.populate();
         try (ServerSocket serverSocket = new ServerSocket(54448)) {
             System.out.println("Quizkampen server is running");
@@ -25,5 +25,9 @@ public class QuizServerListener {
                 game.start();
             }
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        QuizServerListener q = new QuizServerListener();
     }
 }
