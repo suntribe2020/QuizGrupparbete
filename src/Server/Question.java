@@ -63,9 +63,9 @@ public class Question {
         String output = question + "\n";
         for (int i = 0; i < answers.size(); i++) {
             if (i == answers.size() - 1) {
-                output += (i + 1) + ": " + answers.get(i);
+                output += answers.get(i);
             } else {
-                output += (i + 1) + ": " + answers.get(i) + "\n";
+                output += answers.get(i) + "\n";
             }
         }
         return output;

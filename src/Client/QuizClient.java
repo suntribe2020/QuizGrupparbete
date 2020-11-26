@@ -60,41 +60,16 @@ public class QuizClient extends JFrame implements ActionListener {
         textfield.setBounds(0, 0, 650, 50);
         textfield.setBackground(new Color(255, 255, 255));
         textfield.setForeground(new Color(3, 3, 3));
-        textfield.setFont(new Font("Geeza Pro", Font.BOLD, 30));
+        textfield.setFont(new Font("Geeza Pro", Font.BOLD, 15));
         //textfield.setBorder(BorderFactory.createBevelBorder(1));
         textfield.setHorizontalAlignment(JTextField.CENTER);
         textfield.setEditable(false);
-        textfield.setText("Välj Kategori");
+        textfield.setText("Waiting for other player");
 
-
-        button1.setBounds(15, 100, 300, 250);
-        button1.setFont(new Font("Geeza Pro", Font.BOLD, 35));
-        button1.setBackground(new Color(186, 179, 179));
-        button1.setFocusable(false);
-        button1.addActionListener(this);
-        button1.setText("Musik");
-
-        button2.setBounds(315, 100, 300, 250);
-        button2.setFont(new Font("Geeza Pro", Font.BOLD, 35));
-        button2.setBackground(new Color(186, 179, 179));
-        button2.setFocusable(false);
-        button2.addActionListener(this);
-        button2.setText("Spel");
-
-        button3.setBounds(15, 350, 300, 250);
-        button3.setFont(new Font("Geeza Pro", Font.BOLD, 35));
-        button3.setBackground(new Color(186, 179, 179));
-        button3.setFocusable(false);
-        button3.addActionListener(this);
-        button3.setText("Film");
-
-        button4.setBounds(315, 350, 300, 250);
-        button4.setFont(new Font("Geeza Pro", Font.BOLD, 35));
-        button4.setBackground(new Color(186, 179, 179));
-        button4.setFocusable(false);
-        button4.addActionListener(this);
-        button4.setText("Sport");
-
+        setButton(button1," ", 15, 100);
+        setButton(button2," ", 315, 100);
+        setButton(button3," ", 15, 350);
+        setButton(button4," ", 315, 350);
 
         frame.add(button1);
         frame.add(button2);
@@ -110,22 +85,45 @@ public class QuizClient extends JFrame implements ActionListener {
         String message;
         try {
             System.out.println("Started client");
-            String welcomeMesage = readFromServer();
-            System.out.println(welcomeMesage);
+            String welcomeMessage = readFromServer();
+            String currentMessage;
+            textfield.setText(welcomeMessage);
             while (true) {
                 String firstMessage = readFromServer();
                 System.out.println(firstMessage);
-                sendAnswerToServer(scanner);
-                for(int j =0; j<2; j++){
-                for(int i = 0; i<5; i++) {
-                    message = readFromServer();
-                    System.out.println(message);
+                textfield.setText(firstMessage);
+                if (firstMessage.equals("Please choose a category: Music, Film, Games, Sport")){
+                    setCategoriesOnButtons();
+                } else if(firstMessage.startsWith("Chosen")){
+                    writeToServer("Yes");
                 }
-                sendAnswerToServer(scanner);
-                }
+                //sendAnswerToServer(scanner);
+                //for(int j = 0; j<2; j++){
+                for(int i = 0; i<4; i++) {
+                    textfield.setText(readFromServer());
+                    if (textfield.getText().startsWith("Score this round")){
+                        setAllBlankButtons();
+                        break;
+                    }
+                    //if (firstMessage.contains("Opponent scored")){
+                    //    break;
+                    //}
+                    button1.setText(readFromServer());
+                    button2.setText(readFromServer());
+                    button3.setText(readFromServer());
+                    button4.setText(readFromServer());
 
-                String lastMessage = readFromServer();
-                System.out.println("Last message: " + lastMessage);
+                }
+                //sendAnswerToServer(scanner);
+                //}
+                /*textfield.setText("All questions answered, waiting for opponent");
+                button1.setText(" ");
+                button2.setText(" ");
+                button3.setText(" ");
+                button4.setText(" ");*/
+
+                //String lastMessage = readFromServer();
+                //System.out.println("Last message: " + lastMessage);
 
             }
         } finally {
@@ -146,7 +144,20 @@ public class QuizClient extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == button1 || e.getSource() == button2 ||
+            if (e.getSource() == button1) {
+                writeToServer(button1.getText());
+                this.questionIndex += 1;
+            } else if (e.getSource() == button2) {
+                writeToServer(button2.getText());
+                this.questionIndex += 1;
+            }  else if (e.getSource() == button3) {
+                writeToServer(button3.getText());
+                this.questionIndex += 1;
+            }  else if (e.getSource() == button4) {
+                writeToServer(button4.getText());
+                this.questionIndex += 1;
+            }
+        /*if (e.getSource() == button1 || e.getSource() == button2 ||
                 e.getSource() == button3 || e.getSource() == button4) {
             if (e.getSource() == button1) {
                 textfield.setText("Kategori: Musik");
@@ -164,7 +175,7 @@ public class QuizClient extends JFrame implements ActionListener {
                 textfield.setText("Kategori: Sport");
                 socketOutput.println(button4.getText() + questionIndex);
                 this.questionIndex += 1;
-            }
+            }*/
             /*
             textarea.setBounds(0, 50, 650, 50);
             textarea.setLineWrap(true);
@@ -203,9 +214,9 @@ public class QuizClient extends JFrame implements ActionListener {
 
             */
 
-        }
-
     }
+
+
     private void setUpSocketCommunication() {
         try {
             this.socket = new Socket(this.serverAdress, this.portNr);
@@ -231,5 +242,28 @@ public class QuizClient extends JFrame implements ActionListener {
 
     public String readFromServer() throws IOException {
         return this.socketInput.readLine();
+    }
+
+    private void setButton(JButton but, String butText, int x, int y){
+        Color backgroundColor = new Color(186, 179, 179);
+        but.setBounds(x, y, 300, 250);
+        but.setFont(new Font("Geeza Pro", Font.BOLD, 15));
+        but.setBackground(backgroundColor);
+        but.setFocusable(false);
+        but.addActionListener(this);
+        but.setText(butText);
+    }
+
+    private void setAllBlankButtons(){
+        button1.setText("");
+        button2.setText("");
+        button3.setText("");
+        button4.setText("");
+    }
+    private void setCategoriesOnButtons(){
+        button1.setText("Music");
+        button2.setText("Film");
+        button3.setText("Games");
+        button4.setText("Sport");
     }
 }
