@@ -51,19 +51,14 @@ public class Game extends Thread {
 
             if (result.equals(Database.GameCategory.MUSIC.toString())) {
                 currentCategory = Database.getMusicQuestions();
-                isValidChoice = true;
             } else if (result.equals(Database.GameCategory.FILM.toString())) {
                 currentCategory = Database.getFilmQuestions();
-                isValidChoice = true;
             } else if (result.equalsIgnoreCase(Database.GameCategory.GAMES.toString())) {
                 currentCategory = Database.getGameQuestions();
-                isValidChoice = true;
             } else if (result.equalsIgnoreCase(Database.GameCategory.SPORT.toString())) {
                 currentCategory = Database.getSportQuestions();
-                isValidChoice = true;
-            } else {
-                initiateRound(activePlayer, "Choose a valid option");
             }
+            isValidChoice = true;
         }
         Collections.shuffle(currentCategory);
 
