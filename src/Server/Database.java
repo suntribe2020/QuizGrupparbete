@@ -8,6 +8,23 @@ import java.util.List;
 
 public class Database {
 
+    public enum GameCategory {
+        MUSIC("Music"),
+        GAMES("Games"),
+        FILM("Film"),
+        SPORT("Sport");
+
+        public final String category;
+
+        GameCategory(String category) {
+            this.category = category;
+        }
+
+        public String toString() {
+            return category;
+        }
+    }
+
     private static int NUMBER_OF_QUESTIONS = 0;
     private static int NUMBER_OF_ROUNDS = 0;
 

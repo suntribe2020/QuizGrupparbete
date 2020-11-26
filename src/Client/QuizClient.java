@@ -1,5 +1,7 @@
 package Client;
 
+import Server.Database;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -195,9 +197,9 @@ public class QuizClient extends JFrame implements ActionListener {
         button4.setText("");
     }
     private void setCategoriesOnButtons(){
-        button1.setText("Music");
-        button2.setText("Film");
-        button3.setText("Games");
-        button4.setText("Sport");
+        button1.setText(Database.GameCategory.MUSIC.toString());
+        button2.setText(Database.GameCategory.FILM.toString());
+        button3.setText(Database.GameCategory.GAMES.toString());
+        button4.setText(Database.GameCategory.SPORT.toString());
     }
 }
