@@ -66,10 +66,10 @@ public class QuizClient extends JFrame implements ActionListener {
         textfield.setEditable(false);
         textfield.setText("Waiting for other player");
 
-        setButton(button1," ", 15, 100);
-        setButton(button2," ", 315, 100);
-        setButton(button3," ", 15, 350);
-        setButton(button4," ", 315, 350);
+        setButton(button1,"", 15, 100);
+        setButton(button2,"", 315, 100);
+        setButton(button3,"", 15, 350);
+        setButton(button4,"", 315, 350);
 
         frame.add(button1);
         frame.add(button2);
@@ -92,39 +92,34 @@ public class QuizClient extends JFrame implements ActionListener {
                 String firstMessage = readFromServer();
                 System.out.println(firstMessage);
                 textfield.setText(firstMessage);
+
+                //returns category if prompted for category
                 if (firstMessage.equals("Please choose a category: Music, Film, Games, Sport")){
                     setCategoriesOnButtons();
                 } else if(firstMessage.startsWith("Chosen")){
                     writeToServer("Yes");
                 }
-                //sendAnswerToServer(scanner);
-                //for(int j = 0; j<2; j++){
-                for(int i = 0; i<4; i++) {
+
+                //checks if game is over
+                if (firstMessage.startsWith("The game has ended")){
+                    textfield.setText(firstMessage);
+                    System.out.println("gameover");
+                    return;
+                }
+
+                //1 round of questions
+                for(int i = 0; i<3; i++) {
                     textfield.setText(readFromServer());
                     if (textfield.getText().startsWith("Score this round")){
                         setAllBlankButtons();
                         break;
                     }
-                    //if (firstMessage.contains("Opponent scored")){
-                    //    break;
-                    //}
+
                     button1.setText(readFromServer());
                     button2.setText(readFromServer());
                     button3.setText(readFromServer());
                     button4.setText(readFromServer());
-
-                }
-                //sendAnswerToServer(scanner);
-                //}
-                /*textfield.setText("All questions answered, waiting for opponent");
-                button1.setText(" ");
-                button2.setText(" ");
-                button3.setText(" ");
-                button4.setText(" ");*/
-
-                //String lastMessage = readFromServer();
-                //System.out.println("Last message: " + lastMessage);
-
+                    }
             }
         } finally {
             socket.close();
