@@ -2,6 +2,7 @@ package Server;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Game extends Thread {
@@ -56,6 +57,7 @@ public class Game extends Thread {
                 initiateRound(playerToStart, "Choose a valid option");
             }
         }
+        Collections.shuffle(currentCategory);
 
         playQuestionRound(playerToStart);
 
