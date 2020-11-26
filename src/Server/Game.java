@@ -31,13 +31,23 @@ public class Game extends Thread {
             }
         }
     }
+    /*private String getWelcomeMessage(Player currentPlayer){
+        String firstMessage = "Please choose a category: Music, Film, Games, Sport";
+        if (playedRounds !=0) {
+           firstMessage = "Your current score is " + currentPlayer.getTotalScore()
+        }
+    }*/
 
     private void playRound() throws IOException {
         boolean isValidChoice = false;
         String result = null;
 
         while (!isValidChoice) {
-            result = initiateRound(playerToStart, "Please choose a category: Music, Film, Games, Sport");
+            if (playedRounds==0) {
+                result = initiateRound(playerToStart, "Please choose a category");
+            } else{
+                result = initiateRound(playerToStart, "Your score this round was: " + playerToStart.getRoundScore() + " Please choose a category");
+            }
             if (result.equalsIgnoreCase("Music")) {
 
                 currentCategory = Database.getMusicQuestions();
