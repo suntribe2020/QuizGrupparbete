@@ -93,10 +93,7 @@ public class QuizClient extends JFrame implements ActionListener {
                 System.out.println(firstMessage);
                 textfield.setText(firstMessage);
                 if (firstMessage.equals("Please choose a category: Music, Film, Games, Sport")){
-                    button1.setText("Music");
-                    button2.setText("Film");
-                    button3.setText("Games");
-                    button4.setText("Sport");
+                    setCategoriesOnButtons();
                 } else if(firstMessage.startsWith("Chosen")){
                     writeToServer("Yes");
                 }
@@ -262,5 +259,11 @@ public class QuizClient extends JFrame implements ActionListener {
         button2.setText("");
         button3.setText("");
         button4.setText("");
+    }
+    private void setCategoriesOnButtons(){
+        button1.setText("Music");
+        button2.setText("Film");
+        button3.setText("Games");
+        button4.setText("Sport");
     }
 }
