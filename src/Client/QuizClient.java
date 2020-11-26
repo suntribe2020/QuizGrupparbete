@@ -105,11 +105,7 @@ public class QuizClient extends JFrame implements ActionListener {
                 for(int i = 0; i<4; i++) {
                     textfield.setText(readFromServer());
                     if (textfield.getText().startsWith("Score this round")){
-
-                        button1.setText("");
-                        button2.setText("");
-                        button3.setText("");
-                        button4.setText("");
+                        setAllBlankButtons();
                         break;
                     }
                     //if (firstMessage.contains("Opponent scored")){
@@ -259,5 +255,12 @@ public class QuizClient extends JFrame implements ActionListener {
         but.setFocusable(false);
         but.addActionListener(this);
         but.setText(butText);
+    }
+
+    private void setAllBlankButtons(){
+        button1.setText("");
+        button2.setText("");
+        button3.setText("");
+        button4.setText("");
     }
 }
