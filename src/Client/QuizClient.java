@@ -93,7 +93,7 @@ public class QuizClient extends JFrame implements ActionListener {
                 textfield.setText(firstMessage);
 
                 //returns category if prompted for category
-                if (firstMessage.equals("Please choose a category: Music, Film, Games, Sport")){
+                if (firstMessage.contains("choose a category")){
                     setCategoriesOnButtons();
                 } else if(firstMessage.startsWith("Chosen")){
                     button1.setText("yes");
@@ -150,7 +150,6 @@ public class QuizClient extends JFrame implements ActionListener {
                 writeToServer(button4.getText());
             }
     }
-
 
     private void setUpSocketCommunication() {
         try {
