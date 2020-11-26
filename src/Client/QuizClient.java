@@ -1,7 +1,5 @@
 package Client;
 
-import Server.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,13 +22,14 @@ public class QuizClient extends JFrame implements ActionListener {
     JButton button3 = new JButton();
     JButton button4 = new JButton();
 
-    JLabel answer_label1 = new JLabel();
+    /*JLabel answer_label1 = new JLabel();
     JLabel answer_label2 = new JLabel();
     JLabel answer_label3 = new JLabel();
     JLabel answer_label4 = new JLabel();
     JLabel time_label = new JLabel();
     JLabel seconds_left = new JLabel();
     JTextField number_right = new JTextField();
+    */
 
     private int counter = 0;
     int portNr;
@@ -66,10 +65,10 @@ public class QuizClient extends JFrame implements ActionListener {
         textfield.setEditable(false);
         textfield.setText("Waiting for other player");
 
-        setButton(button1,"", 15, 100);
-        setButton(button2,"", 315, 100);
-        setButton(button3,"", 15, 350);
-        setButton(button4,"", 315, 350);
+        createButton(button1,"", 15, 100);
+        createButton(button2,"", 315, 100);
+        createButton(button3,"", 15, 350);
+        createButton(button4,"", 315, 350);
 
         frame.add(button1);
         frame.add(button2);
@@ -97,7 +96,10 @@ public class QuizClient extends JFrame implements ActionListener {
                 if (firstMessage.equals("Please choose a category: Music, Film, Games, Sport")){
                     setCategoriesOnButtons();
                 } else if(firstMessage.startsWith("Chosen")){
-                    writeToServer("Yes");
+                    button1.setText("yes");
+                    button2.setText("ready");
+                    button3.setText("sure thing");
+                    button4.setText("no");
                 }
 
                 //checks if game is over
@@ -114,12 +116,11 @@ public class QuizClient extends JFrame implements ActionListener {
                         setAllBlankButtons();
                         break;
                     }
-
                     button1.setText(readFromServer());
                     button2.setText(readFromServer());
                     button3.setText(readFromServer());
                     button4.setText(readFromServer());
-                    }
+                }
             }
         } finally {
             socket.close();
@@ -141,74 +142,13 @@ public class QuizClient extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
             if (e.getSource() == button1) {
                 writeToServer(button1.getText());
-                this.questionIndex += 1;
             } else if (e.getSource() == button2) {
                 writeToServer(button2.getText());
-                this.questionIndex += 1;
             }  else if (e.getSource() == button3) {
                 writeToServer(button3.getText());
-                this.questionIndex += 1;
             }  else if (e.getSource() == button4) {
                 writeToServer(button4.getText());
-                this.questionIndex += 1;
             }
-        /*if (e.getSource() == button1 || e.getSource() == button2 ||
-                e.getSource() == button3 || e.getSource() == button4) {
-            if (e.getSource() == button1) {
-                textfield.setText("Kategori: Musik");
-                socketOutput.println(button1.getText() + questionIndex);
-                this.questionIndex += 1;
-            } else if (e.getSource() == button2) {
-                textfield.setText("Kategori: Spel");
-                socketOutput.println(button2.getText() + questionIndex);
-                this.questionIndex += 1;
-            } else if (e.getSource() == button3) {
-                textfield.setText("Kategori: Film");
-                socketOutput.println(button3.getText() + questionIndex);
-                this.questionIndex += 1;
-            } else if (e.getSource() == button4) {
-                textfield.setText("Kategori: Sport");
-                socketOutput.println(button4.getText() + questionIndex);
-                this.questionIndex += 1;
-            }*/
-            /*
-            textarea.setBounds(0, 50, 650, 50);
-            textarea.setLineWrap(true);
-            textarea.setWrapStyleWord(true);
-            textarea.setBackground(new Color(255, 255, 255));
-            textarea.setForeground(new Color(0, 0, 0));
-            textarea.setFont(new Font("Geeza Pro", Font.BOLD, 15));
-            // textarea.setBorder(BorderFactory.createBevelBorder(1));
-            textarea.setEditable(false);
-            //textarea.setText(questionDatabase.getMusicQuestions()[counter]);
-            frame.add(textarea);
-
-            button1.setBounds(0, 100, 100, 100);
-            button1.setFont(new Font("Geeza Pro", Font.BOLD, 35));
-            button1.setFocusable(false);
-            // buttonA.addActionListener(this);
-            button1.setText("1");
-
-            button2.setBounds(0, 200, 100, 100);
-            button2.setFont(new Font("Geeza Pro", Font.BOLD, 35));
-            button2.setFocusable(false);
-            // buttonA.addActionListener(this);
-            button2.setText("2");
-
-            button3.setBounds(0, 300, 100, 100);
-            button3.setFont(new Font("Geeza Pro", Font.BOLD, 35));
-            button3.setFocusable(false);
-            // buttonA.addActionListener(this);
-            button3.setText("3");
-
-            button4.setBounds(0, 400, 100, 100);
-            button4.setFont(new Font("Geeza Pro", Font.BOLD, 35));
-            button4.setFocusable(false);
-            // buttonA.addActionListener(this);
-            button4.setText("4");
-
-            */
-
     }
 
 
@@ -239,7 +179,7 @@ public class QuizClient extends JFrame implements ActionListener {
         return this.socketInput.readLine();
     }
 
-    private void setButton(JButton but, String butText, int x, int y){
+    private void createButton(JButton but, String butText, int x, int y){
         Color backgroundColor = new Color(186, 179, 179);
         but.setBounds(x, y, 300, 250);
         but.setFont(new Font("Geeza Pro", Font.BOLD, 15));
