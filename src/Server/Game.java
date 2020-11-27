@@ -14,7 +14,7 @@ public class Game extends Thread {
     private boolean isGameOver;
     private int playedRounds = 0;
     private String answer;
-    int tempScore;
+    private int tempScore;
 
     public List<Question> currentCategory = new ArrayList<>(4);
 
