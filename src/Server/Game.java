@@ -50,24 +50,17 @@ public class Game extends Thread {
             } else{
                 result = initiateRound(activePlayer, "Your score this round was: " + tempScore + " Please choose a category");
             }
-            if (result.equalsIgnoreCase("Music")) {
 
+            if (result.equals(Database.GameCategory.MUSIC.toString())) {
                 currentCategory = Database.getMusicQuestions();
-                isValidChoice = true;
-            } else if (result.equalsIgnoreCase("Film")) {
+            } else if (result.equals(Database.GameCategory.FILM.toString())) {
                 currentCategory = Database.getFilmQuestions();
-                isValidChoice = true;
-            } else if (result.equalsIgnoreCase("Games")) {
-
+            } else if (result.equalsIgnoreCase(Database.GameCategory.GAMES.toString())) {
                 currentCategory = Database.getGameQuestions();
-                isValidChoice = true;
-            } else if (result.equalsIgnoreCase("Sport")) {
-
+            } else if (result.equalsIgnoreCase(Database.GameCategory.SPORT.toString())) {
                 currentCategory = Database.getSportQuestions();
-                isValidChoice = true;
-            } else {
-                initiateRound(activePlayer, "Choose a valid option");
             }
+            isValidChoice = true;
         }
         Collections.shuffle(currentCategory);
 
