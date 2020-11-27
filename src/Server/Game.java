@@ -13,6 +13,8 @@ public class Game extends Thread {
     private Player waitingPlayer;
     private boolean isGameOver;
     private int playedRounds = 0;
+    private String answer;
+    int tempScore;
 
     public List<Question> currentCategory = new ArrayList<>(4);
 
@@ -46,7 +48,7 @@ public class Game extends Thread {
             if (playedRounds==0) {
                 result = initiateRound(activePlayer, "Please choose a category");
             } else{
-                result = initiateRound(activePlayer, "Your score this round was: " + activePlayer.getRoundScore() + " Please choose a category");
+                result = initiateRound(activePlayer, "Your score this round was: " + tempScore + " Please choose a category");
             }
             if (result.equalsIgnoreCase("Music")) {
 
@@ -113,11 +115,15 @@ public class Game extends Thread {
             playedRounds++;
             if(playedRounds==1) {
                 player.writeToClient("Score this round: " + player.getRoundScore() + ". Oppenent scored: " + activePlayer.getRoundScore());
+                System.out.println("Score this round: " + player.getRoundScore() + ". Oppenent scored: " + waitingPlayer.getRoundScore());
 //                playerToStart.writeToClient("Your opponent scored:  " + player.getRoundScore());
             } else {
                 player.writeToClient("Score this round: " + player.getRoundScore() + ". Total score:  " + player.getTotalScore());
+                System.out.println("Två");
 //                playerToStart.writeToClient("Your opponent scored:  " + player.getRoundScore() + ". Their total score:  " + player.getTotalScore());
             }
+
+            tempScore = waitingPlayer.getRoundScore();
             activePlayer.setRoundScore(0);
             waitingPlayer.setRoundScore(0);
         } else {
