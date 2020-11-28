@@ -13,13 +13,13 @@ public class QuizServerListener {
             System.out.println("Quizkampen server is running");
             while (true) {
                 playerToStart = new Player(serverSocket.accept(), '1');
-                playerToStart.writeToClient("Welcome Player " + playerToStart.playerSignature + ". You are now waiting for another " +
+                playerToStart.writeToClient("Welcome Player " + playerToStart.playerSignature + ". Waiting for another " +
                         "player");
                 System.out.println("Player 1 connected");
                 playerToWait = new Player(serverSocket.accept(), '2');
                 System.out.println("Player 2 connected");
-                playerToWait.writeToClient("Welcome Player" + playerToWait.playerSignature + ". You are now waiting for the first " +
-                        "player to choose a category and answer the questions");
+                playerToWait.writeToClient("Welcome Player " + playerToWait.playerSignature + ". Waiting for " +
+                        "Player 1 to choose a category and answer the questions");
 
                 Game game = new Game(playerToStart, playerToWait);
                 game.start();
