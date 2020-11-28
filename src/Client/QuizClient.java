@@ -135,11 +135,6 @@ public class QuizClient extends JFrame implements ActionListener {
         client.play();
     }
 
-    private void sendAnswerToServer(Scanner scanner) {
-        String answer = scanner.nextLine();
-        writeToServer(answer);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
             if (e.getSource() == button1) {
