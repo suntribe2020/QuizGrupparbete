@@ -11,38 +11,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class QuizClient extends JFrame implements ActionListener {
 
-    private static final Font GEEZA_PRO = new Font("Geeza Pro", Font.BOLD, 15);
-    JTextField textfield = new JTextField();
-    JTextArea textarea = new JTextArea();
+    private final Font QUESTION_FONT = new Font("Geeza Pro", Font.BOLD, 13);
+    private final Font ANSWER_FONT = new Font("Geeza Pro", Font.BOLD, 15);
+    private final JTextField textfield = new JTextField();
 
     JButton button1 = new JButton();
     JButton button2 = new JButton();
     JButton button3 = new JButton();
     JButton button4 = new JButton();
 
-    /*JLabel answer_label1 = new JLabel();
-    JLabel answer_label2 = new JLabel();
-    JLabel answer_label3 = new JLabel();
-    JLabel answer_label4 = new JLabel();
-    JLabel time_label = new JLabel();
-    JLabel seconds_left = new JLabel();
-    JTextField number_right = new JTextField();
-    */
 
-    private int counter = 0;
-    int portNr;
-    String serverAdress;
+    private int portNr;
+    private final String serverAddress;
     private Socket socket;
     private BufferedReader socketInput;
     private PrintWriter socketOutput;
-    private int questionIndex = 0;
 
-    public QuizClient(String serverAdress, int portNr) {
-        this.serverAdress = serverAdress;
+
+    public QuizClient(String serverAddress, int portNr) {
+        this.serverAddress = serverAddress;
         this.portNr = portNr;
         setUpGameBoard();
         setUpSocketCommunication();
@@ -61,7 +51,7 @@ public class QuizClient extends JFrame implements ActionListener {
         textfield.setBounds(0, 0, 650, 50);
         textfield.setBackground(Color.WHITE);
         textfield.setForeground(Color.BLACK);
-        textfield.setFont(GEEZA_PRO);
+        textfield.setFont(QUESTION_FONT);
         //textfield.setBorder(BorderFactory.createBevelBorder(1));
         textfield.setHorizontalAlignment(JTextField.CENTER);
         textfield.setEditable(false);
@@ -77,7 +67,9 @@ public class QuizClient extends JFrame implements ActionListener {
         add(button3);
         add(button4);
         add(textfield);
+        setLocationRelativeTo(null);
         setVisible(true);
+
     }
 
     public void play () throws Exception {
@@ -150,7 +142,7 @@ public class QuizClient extends JFrame implements ActionListener {
 
     private void setUpSocketCommunication() {
         try {
-            this.socket = new Socket(this.serverAdress, this.portNr);
+            this.socket = new Socket(this.serverAddress, this.portNr);
             generateSocketReader();
             generateSocketWriter();
         } catch (IOException e) {
@@ -178,7 +170,7 @@ public class QuizClient extends JFrame implements ActionListener {
     private void createButton(JButton but, String butText, int x, int y){
         Color backgroundColor = new Color(186, 179, 179);
         but.setBounds(x, y, 300, 250);
-        but.setFont(GEEZA_PRO);
+        but.setFont(ANSWER_FONT);
         but.setBackground(backgroundColor);
         but.setFocusable(false);
         but.addActionListener(this);
