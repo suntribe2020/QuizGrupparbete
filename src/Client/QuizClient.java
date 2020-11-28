@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class QuizClient extends JFrame implements ActionListener {
 
-    JFrame frame = new JFrame();
+    private static final Font GEEZA_PRO = new Font("Geeza Pro", Font.BOLD, 15);
     JTextField textfield = new JTextField();
     JTextArea textarea = new JTextArea();
 
@@ -59,9 +59,9 @@ public class QuizClient extends JFrame implements ActionListener {
 
         //Här syns det vilken fråga i ronden man är på.
         textfield.setBounds(0, 0, 650, 50);
-        textfield.setBackground(new Color(255, 255, 255));
-        textfield.setForeground(new Color(3, 3, 3));
-        textfield.setFont(new Font("Geeza Pro", Font.BOLD, 15));
+        textfield.setBackground(Color.WHITE);
+        textfield.setForeground(Color.BLACK);
+        textfield.setFont(GEEZA_PRO);
         //textfield.setBorder(BorderFactory.createBevelBorder(1));
         textfield.setHorizontalAlignment(JTextField.CENTER);
         textfield.setEditable(false);
@@ -183,7 +183,7 @@ public class QuizClient extends JFrame implements ActionListener {
     private void createButton(JButton but, String butText, int x, int y){
         Color backgroundColor = new Color(186, 179, 179);
         but.setBounds(x, y, 300, 250);
-        but.setFont(new Font("Geeza Pro", Font.BOLD, 15));
+        but.setFont(GEEZA_PRO);
         but.setBackground(backgroundColor);
         but.setFocusable(false);
         but.addActionListener(this);
