@@ -9,23 +9,20 @@ public class Game extends Thread {
 
     private final int numberOfRounds = Database.getNumberOfRounds();
     private final int numberOfQuestions = Database.getNumberOfQuestions();
-    private Player activePlayer;
-    private Player waitingPlayer;
-    private boolean isGameOver;
+    private Player firstPlayer;
+    private Player secondPlayer;
     private int playedRounds = 0;
-    private String answer;
-    private int tempScore;
 
-    public List<Question> currentCategory = new ArrayList<>(4);
+    public List<Question> currentCategory = new ArrayList<>();
 
-    public Game(Player activePlayer, Player waitingPlayer) {
-        this.activePlayer = activePlayer;
-        this.waitingPlayer = waitingPlayer;
+    public Game(Player firstPlayer, Player secondPlayer) {
+        this.firstPlayer = firstPlayer;
+        this.secondPlayer = secondPlayer;
     }
 
     @Override
     public void run() {
-        while(playedRounds<=numberOfRounds) {
+        while (playedRounds <= numberOfRounds) {
             try {
                 playRound();
             } catch (IOException e) {
@@ -33,113 +30,85 @@ public class Game extends Thread {
             }
         }
     }
-    /*private String getWelcomeMessage(Player currentPlayer){
-        String firstMessage = "Please choose a category: Music, Film, Games, Sport";
-        if (playedRounds !=0) {
-           firstMessage = "Your current score is " + currentPlayer.getTotalScore()
-        }
-    }*/
 
     private void playRound() throws IOException {
         boolean isValidChoice = false;
-        String result = null;
+        String chosenCategory = null;
 
         while (!isValidChoice) {
-            if (playedRounds==0) {
-                result = initiateRound(activePlayer, "Please choose a category");
-            } else{
-                result = initiateRound(activePlayer, "Your score this round was: " + tempScore + " Please choose a category");
-            }
+            chosenCategory = initiateRound(firstPlayer, "Please choose a category");
 
-            if (result.equals(Database.GameCategory.MUSIC.toString())) {
+            if (chosenCategory.equals(Database.GameCategory.MUSIC.toString())) {
                 currentCategory = Database.getMusicQuestions();
-            } else if (result.equals(Database.GameCategory.FILM.toString())) {
+            } else if (chosenCategory.equals(Database.GameCategory.FILM.toString())) {
                 currentCategory = Database.getFilmQuestions();
-            } else if (result.equalsIgnoreCase(Database.GameCategory.GAMES.toString())) {
+            } else if (chosenCategory.equalsIgnoreCase(Database.GameCategory.GAMES.toString())) {
                 currentCategory = Database.getGameQuestions();
-            } else if (result.equalsIgnoreCase(Database.GameCategory.SPORT.toString())) {
+            } else if (chosenCategory.equalsIgnoreCase(Database.GameCategory.SPORT.toString())) {
                 currentCategory = Database.getSportQuestions();
             }
             isValidChoice = true;
         }
         Collections.shuffle(currentCategory);
 
-        playQuestionRound(activePlayer);
+        // first player round
+        playQuestionRound(firstPlayer);
+        firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Please wait for the opponent to " +
+                "play round");
 
-        //player two round
-        String welcomeMessage = "Chosen categories to play was: " + result + " Are you ready to start?";
-        initiateRound(waitingPlayer, welcomeMessage);
-        playQuestionRound(waitingPlayer);
+        // second player round
+        String welcomeMessage = "Chosen category to play was: " + chosenCategory + ". Are you ready to start?";
+        initiateRound(secondPlayer, welcomeMessage);
+        playQuestionRound(secondPlayer);
+
+        // end of both round checks and proceeding
+        playedRounds++;
+        firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Opponent scored: " + secondPlayer.getRoundScore());
+        writeScoreToSecondPlayerAndAwaitGo();
+
+        if (checkIfGameOver()) { // is game is over, else flip players and go again
+            writeEndMessage(firstPlayer, secondPlayer);
+            writeEndMessage(secondPlayer, firstPlayer);
+        }
         flipPlayers();
     }
 
     private void flipPlayers() {
-        Player tempPlayer = waitingPlayer;
-        waitingPlayer = activePlayer;
-        activePlayer = tempPlayer;
+        Player tempPlayer = secondPlayer;
+        secondPlayer = firstPlayer;
+        firstPlayer = tempPlayer;
     }
 
     private String initiateRound(Player player, String message) throws IOException {
         player.writeToClient(message);
-        String answer = player.readFromClient();
-        //System.out.println("Answer from player 2 is:   " + answer);
-        return answer;
+        return player.readFromClient();
     }
 
     private void playQuestionRound(Player player) throws IOException {
-
-        for(Question q : currentCategory) {
-            System.out.println("Test");
-            System.out.println(q.printQuestion());
-            System.out.println("Test over");
-        }
-
-        for(int i = 0; i<numberOfQuestions; i++) {
+        player.setRoundScore(0);
+        for (int i = 0; i < numberOfQuestions; i++) {
             player.writeToClient(currentCategory.get(i).printQuestion());
             String answer = player.readFromClient();
-            if (answer.equalsIgnoreCase(currentCategory.get(i).getAnswer())){
-                player.setRoundScore(player.getRoundScore()+1);
+            if (answer.equalsIgnoreCase(currentCategory.get(i).getAnswer())) {
+                player.setRoundScore(player.getRoundScore() + 1);
             }
         }
-
         player.addToTotalScore(player.getRoundScore());
-
-        if(player.equals(waitingPlayer)){
-            playedRounds++;
-            if(playedRounds==1) {
-                player.writeToClient("Score this round: " + player.getRoundScore() + ". Oppenent scored: " + activePlayer.getRoundScore());
-                System.out.println("Score this round: " + player.getRoundScore() + ". Oppenent scored: " + waitingPlayer.getRoundScore());
-//                playerToStart.writeToClient("Your opponent scored:  " + player.getRoundScore());
-            } else {
-                player.writeToClient("Score this round: " + player.getRoundScore() + ". Total score:  " + player.getTotalScore());
-                System.out.println("Två");
-//                playerToStart.writeToClient("Your opponent scored:  " + player.getRoundScore() + ". Their total score:  " + player.getTotalScore());
-            }
-
-            tempScore = waitingPlayer.getRoundScore();
-            activePlayer.setRoundScore(0);
-            waitingPlayer.setRoundScore(0);
-        } else {
-            if(playedRounds==0) {
-                player.writeToClient("Score this round: " + player.getRoundScore() + ". Waiting for opponent to finish round");
-            } else player.writeToClient("Score this round: " + player.getRoundScore() + ". Total score:  " + player.getTotalScore()+ ". Waiting for opponent to finish round");
-        }
-        isGameOver = checkIfGameOver();
-        if(isGameOver) {
-            writeEndMessage(activePlayer, waitingPlayer);
-            writeEndMessage(waitingPlayer, activePlayer);
-        }
     }
 
     public void writeEndMessage(Player player1, Player player2) {
         player1.writeToClient("The game has ended. Your score was " + player1.getTotalScore() + ". Your opponent scored: " + player2.getTotalScore());
     }
 
-    public boolean checkIfGameOver(){
-        return playedRounds == numberOfRounds;
+    public void writeScoreToSecondPlayerAndAwaitGo() throws IOException {
+        secondPlayer.writeToClient("You scored: " + secondPlayer.getRoundScore() + " this round. The opponent scored: "
+                + firstPlayer.getRoundScore());
+        if (playedRounds != Database.getNumberOfRounds()) {
+            secondPlayer.readFromClient();
+        }
     }
 
-    public int getPlayedRounds() {
-        return playedRounds;
+    public boolean checkIfGameOver() {
+        return playedRounds == numberOfRounds;
     }
 }
