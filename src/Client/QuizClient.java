@@ -49,12 +49,12 @@ public class QuizClient extends JFrame implements ActionListener {
     }
 
     private void setUpGameBoard() {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(650, 650);
-        frame.getContentPane().setBackground(new Color(193, 186, 186));
-        frame.setLayout(null);
-        frame.setResizable(false);
-        frame.setTitle("Quizkampen");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(650, 650);
+        getContentPane().setBackground(new Color(193, 186, 186));
+        setLayout(null);
+        setResizable(false);
+        setTitle("Quizkampen");
 
 
         //Här syns det vilken fråga i ronden man är på.
@@ -72,12 +72,12 @@ public class QuizClient extends JFrame implements ActionListener {
         createButton(button3,"", 15, 350);
         createButton(button4,"", 315, 350);
 
-        frame.add(button1);
-        frame.add(button2);
-        frame.add(button3);
-        frame.add(button4);
-        frame.add(textfield);
-        frame.setVisible(true);
+        add(button1);
+        add(button2);
+        add(button3);
+        add(button4);
+        add(textfield);
+        setVisible(true);
     }
 
     public void play () throws Exception {
