@@ -1,6 +1,7 @@
 package Client;
 
 import Server.Database;
+import Server.ServerInstruction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,42 +87,57 @@ public class QuizClient extends JFrame implements ActionListener {
             String welcomeMessage = readFromServer();
             textfield.setText(welcomeMessage);
 
+            /**
+             * First message from server is always the ServerInstruction enum
+             */
             while (true) {
-                String firstMessageFromServer = readFromServer();
-                textfield.setText(firstMessageFromServer);
-                System.out.println(firstMessageFromServer);
+                ServerInstruction serverInstruction = ServerInstruction.valueOf(readFromServer());
+                System.out.println("Instruction from server: " + serverInstruction.name());
 
-                // different scenarios from server
-                // important not to send conflicting messages from the server to distrupt the logic
-                if (firstMessageFromServer.startsWith("Score this round")) { // server reports score
-                    textfield.setText(firstMessageFromServer);
-                    setAllBlankButtons();
-                } else if (firstMessageFromServer.contains("choose a category")){ // server requests a category
-                    textfield.setText(firstMessageFromServer);
-                    setCategoriesOnButtons();
-                } else if(firstMessageFromServer.startsWith("Chosen")) { // server asks player to initiate new round
-                    button1.setText("yes");
-                    button2.setText("ready");
-                    button3.setText("sure thing");
-                    button4.setText("no");
-                } else if (firstMessageFromServer.startsWith("The game has ended")) { // the game is over
-                    textfield.setText(firstMessageFromServer);
-                    setAllBlankButtons();
-                    System.out.println("gameover");
-                    return;
-                    // reports score to second player, waits input to not override textfield with a next line from server
-                } else if (firstMessageFromServer.contains("You scored:")) {
-                    textfield.setText(firstMessageFromServer);
-                    button1.setText("ok");
-                    button2.setText("ok");
-                    button3.setText("ok");
-                    button4.setText("ok");
-                } else { // play a round if none of the above special cases are met, expect to read 4 alternatives
-                    textfield.setText(firstMessageFromServer);
-                    button1.setText(readFromServer());
-                    button2.setText(readFromServer());
-                    button3.setText(readFromServer());
-                    button4.setText(readFromServer());
+                switch (serverInstruction) {
+                    // server requests category from first player
+                    case FIRST_PLAYER_ROUND_START -> {
+                        textfield.setText(readFromServer());
+                        setCategoriesOnButtons();
+                    }
+                    // server requests second player to initiate a new round
+                    case SECOND_PLAYER_ROUND_START -> {
+                        textfield.setText(readFromServer());
+                        button1.setText("yes");
+                        button2.setText("ready");
+                        button3.setText("sure thing");
+                        button4.setText("no");
+                    }
+                    // server reports first player score
+                    case FIRST_PLAYER_SCORE -> {
+                        textfield.setText(readFromServer());
+                        setAllBlankButtons();
+                    }
+                    // server reports second player score and await input to start second player round,
+                    // this to not overwrite the textfield displaying the score, before next round starts
+                    case SECOND_PLAYER_SCORE -> {
+                        textfield.setText(readFromServer());
+                        button1.setText("ok");
+                        button2.setText("ok");
+                        button3.setText("ok");
+                        button4.setText("ok");
+                    }
+                    // the game is over
+                    case GAME_ENDED -> {
+                        textfield.setText(readFromServer());
+                        setAllBlankButtons();
+                        System.out.println("gameover");
+                        return;
+                    }
+                    // server sends questions
+                    case QUESTION -> {
+                        textfield.setText(readFromServer());
+                        button1.setText(readFromServer());
+                        button2.setText(readFromServer());
+                        button3.setText(readFromServer());
+                        button4.setText(readFromServer());
+                    }
+                    default -> System.out.println("ERROR! UNKNOWN INSTRUCTION");
                 }
             }
         } finally {
