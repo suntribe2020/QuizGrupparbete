@@ -81,43 +81,43 @@ public class QuizClient extends JFrame implements ActionListener {
     }
 
     public void play () throws Exception {
-
-        Scanner scanner = new Scanner(System.in);
-        String message;
         try {
             System.out.println("Started client");
             String welcomeMessage = readFromServer();
-            String currentMessage;
             textfield.setText(welcomeMessage);
-            while (true) {
-                String firstMessage = readFromServer();
-                System.out.println(firstMessage);
-                textfield.setText(firstMessage);
 
-                //returns category if prompted for category
-                if (firstMessage.contains("choose a category")){
+            while (true) {
+                String firstMessageFromServer = readFromServer();
+                textfield.setText(firstMessageFromServer);
+                System.out.println(firstMessageFromServer);
+
+                // different scenarios from server
+                // important not to send conflicting messages from the server to distrupt the logic
+                if (firstMessageFromServer.startsWith("Score this round")) { // server reports score
+                    textfield.setText(firstMessageFromServer);
+                    setAllBlankButtons();
+                } else if (firstMessageFromServer.contains("choose a category")){ // server requests a category
+                    textfield.setText(firstMessageFromServer);
                     setCategoriesOnButtons();
-                } else if(firstMessage.startsWith("Chosen")){
+                } else if(firstMessageFromServer.startsWith("Chosen")) { // server asks player to initiate new round
                     button1.setText("yes");
                     button2.setText("ready");
                     button3.setText("sure thing");
                     button4.setText("no");
-                }
-
-                //checks if game is over
-                if (firstMessage.startsWith("The game has ended")){
-                    textfield.setText(firstMessage);
+                } else if (firstMessageFromServer.startsWith("The game has ended")) { // the game is over
+                    textfield.setText(firstMessageFromServer);
+                    setAllBlankButtons();
                     System.out.println("gameover");
                     return;
-                }
-
-                //1 round of questions
-                for(int i = 0; i<3; i++) {
-                    textfield.setText(readFromServer());
-                    if (textfield.getText().startsWith("Score this round")){
-                        setAllBlankButtons();
-                        break;
-                    }
+                    // reports score to second player, waits input to not override textfield with a next line from server
+                } else if (firstMessageFromServer.contains("You scored:")) {
+                    textfield.setText(firstMessageFromServer);
+                    button1.setText("ok");
+                    button2.setText("ok");
+                    button3.setText("ok");
+                    button4.setText("ok");
+                } else { // play a round if none of the above special cases are met, expect to read 4 alternatives
+                    textfield.setText(firstMessageFromServer);
                     button1.setText(readFromServer());
                     button2.setText(readFromServer());
                     button3.setText(readFromServer());
