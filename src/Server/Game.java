@@ -32,54 +32,46 @@ public class Game extends Thread {
     }
 
     private void playRound() throws IOException {
-        boolean isValidChoice = false;
-        String chosenCategory = null;
-
-        while (!isValidChoice) {
-            chosenCategory = initiateRound(firstPlayer, "Please choose a category");
-
-            if (chosenCategory.equals(Database.GameCategory.MUSIC.toString())) {
-                currentCategory = Database.getMusicQuestions();
-            } else if (chosenCategory.equals(Database.GameCategory.FILM.toString())) {
-                currentCategory = Database.getFilmQuestions();
-            } else if (chosenCategory.equalsIgnoreCase(Database.GameCategory.GAMES.toString())) {
-                currentCategory = Database.getGameQuestions();
-            } else if (chosenCategory.equalsIgnoreCase(Database.GameCategory.SPORT.toString())) {
-                currentCategory = Database.getSportQuestions();
-            }
-            isValidChoice = true;
-        }
+        String chosenCategory = initiateRound(firstPlayer, ServerInstruction.FIRST_PLAYER_ROUND_START,
+                "Please choose a category");
+        setChosenCategory(chosenCategory);
         Collections.shuffle(currentCategory);
 
         // first player round
         playQuestionRound(firstPlayer);
-        firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Please wait for the opponent to " +
-                "play round");
+        sendFirstPlayerScore(true);
 
         // second player round
-        String welcomeMessage = "Chosen category to play was: " + chosenCategory + ". Are you ready to start?";
-        initiateRound(secondPlayer, welcomeMessage);
+        String secondPlayerReadyMessage = "Chosen category to play was: " + chosenCategory + ". Are you ready to start?";
+        initiateRound(secondPlayer, ServerInstruction.SECOND_PLAYER_ROUND_START, secondPlayerReadyMessage);
         playQuestionRound(secondPlayer);
 
         // end of both round checks and proceeding
         playedRounds++;
-        firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Opponent scored: " + secondPlayer.getRoundScore());
-        writeScoreToSecondPlayerAndAwaitGo();
+        sendFirstPlayerScore(false);
+        sendSecondPlayerScore();
 
-        if (checkIfGameOver()) { // is game is over, else flip players and go again
+        if (checkIfGameOver()) { // is game over, else flip players and go again
             writeEndMessage(firstPlayer, secondPlayer);
             writeEndMessage(secondPlayer, firstPlayer);
         }
         flipPlayers();
     }
 
-    private void flipPlayers() {
-        Player tempPlayer = secondPlayer;
-        secondPlayer = firstPlayer;
-        firstPlayer = tempPlayer;
+    private void setChosenCategory(String chosenCategory) {
+        if (chosenCategory.equals(Database.GameCategory.MUSIC.toString())) {
+            currentCategory = Database.getMusicQuestions();
+        } else if (chosenCategory.equals(Database.GameCategory.FILM.toString())) {
+            currentCategory = Database.getFilmQuestions();
+        } else if (chosenCategory.equalsIgnoreCase(Database.GameCategory.GAMES.toString())) {
+            currentCategory = Database.getGameQuestions();
+        } else if (chosenCategory.equalsIgnoreCase(Database.GameCategory.SPORT.toString())) {
+            currentCategory = Database.getSportQuestions();
+        }
     }
 
-    private String initiateRound(Player player, String message) throws IOException {
+    private String initiateRound(Player player, ServerInstruction instruction, String message) throws IOException {
+        player.writeToClient(instruction.name());
         player.writeToClient(message);
         return player.readFromClient();
     }
@@ -87,6 +79,7 @@ public class Game extends Thread {
     private void playQuestionRound(Player player) throws IOException {
         player.setRoundScore(0);
         for (int i = 0; i < numberOfQuestions; i++) {
+            player.writeToClient(ServerInstruction.QUESTION.name());
             player.writeToClient(currentCategory.get(i).printQuestion());
             String answer = player.readFromClient();
             if (answer.equalsIgnoreCase(currentCategory.get(i).getAnswer())) {
@@ -96,19 +89,40 @@ public class Game extends Thread {
         player.addToTotalScore(player.getRoundScore());
     }
 
-    public void writeEndMessage(Player player1, Player player2) {
-        player1.writeToClient("The game has ended. Your score was " + player1.getTotalScore() + ". Your opponent scored: " + player2.getTotalScore());
+    private void sendFirstPlayerScore(boolean firstReport) {
+        firstPlayer.writeToClient(ServerInstruction.FIRST_PLAYER_SCORE.name());
+        if (firstReport) {
+            // first round score (without opponent score)
+            firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Please wait for the opponent " +
+                    "to play round");
+        } else {
+            // second round score (with opponent score)
+            firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Opponent scored: "
+                    + secondPlayer.getRoundScore());
+        }
     }
 
-    public void writeScoreToSecondPlayerAndAwaitGo() throws IOException {
+    public void sendSecondPlayerScore() throws IOException {
+        secondPlayer.writeToClient(ServerInstruction.SECOND_PLAYER_SCORE.name());
         secondPlayer.writeToClient("You scored: " + secondPlayer.getRoundScore() + " this round. The opponent scored: "
                 + firstPlayer.getRoundScore());
-        if (playedRounds != Database.getNumberOfRounds()) {
-            secondPlayer.readFromClient();
-        }
+
+        secondPlayer.readFromClient();
     }
 
     public boolean checkIfGameOver() {
         return playedRounds == numberOfRounds;
+    }
+
+    public void writeEndMessage(Player player1, Player player2) {
+        player1.writeToClient(ServerInstruction.GAME_ENDED.name());
+        player1.writeToClient("The game has ended. Your score was " + player1.getTotalScore() + ". Your opponent scored: "
+                + player2.getTotalScore());
+    }
+
+    private void flipPlayers() {
+        Player tempPlayer = secondPlayer;
+        secondPlayer = firstPlayer;
+        firstPlayer = tempPlayer;
     }
 }
