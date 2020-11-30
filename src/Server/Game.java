@@ -32,9 +32,11 @@ public class Game extends Thread {
     }
 
     private void playRound() throws IOException {
+
         String chosenCategory = initiateRound(firstPlayer, ServerInstruction.FIRST_PLAYER_ROUND_START,
                 "Please choose a category");
-        setChosenCategory(chosenCategory);
+        Database.GameCategory category = Database.GameCategory.valueOf(chosenCategory.toUpperCase());
+        currentCategory = Database.getQuestions(category);
         Collections.shuffle(currentCategory);
 
         // first player round
@@ -56,18 +58,6 @@ public class Game extends Thread {
             writeEndMessage(secondPlayer, firstPlayer);
         }
         flipPlayers();
-    }
-
-    private void setChosenCategory(String chosenCategory) {
-        if (chosenCategory.equals(Database.GameCategory.MUSIC.toString())) {
-            currentCategory = Database.getMusicQuestions();
-        } else if (chosenCategory.equals(Database.GameCategory.FILM.toString())) {
-            currentCategory = Database.getFilmQuestions();
-        } else if (chosenCategory.equalsIgnoreCase(Database.GameCategory.GAMES.toString())) {
-            currentCategory = Database.getGameQuestions();
-        } else if (chosenCategory.equalsIgnoreCase(Database.GameCategory.SPORT.toString())) {
-            currentCategory = Database.getSportQuestions();
-        }
     }
 
     private String initiateRound(Player player, ServerInstruction instruction, String message) throws IOException {
@@ -92,11 +82,11 @@ public class Game extends Thread {
     private void sendFirstPlayerScore(boolean firstReport) {
         firstPlayer.writeToClient(ServerInstruction.FIRST_PLAYER_SCORE.name());
         if (firstReport) {
-            // first round score (without opponent score)
+            // first score report (without opponent score)
             firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Please wait for the opponent " +
                     "to play round");
         } else {
-            // second round score (with opponent score)
+            // second score report (with opponent score)
             firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Opponent scored: "
                     + secondPlayer.getRoundScore());
         }
