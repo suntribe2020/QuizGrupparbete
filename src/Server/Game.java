@@ -88,6 +88,11 @@ public class Game extends Thread {
                 player.writeToClient(currentCategory.get(i).getAnswer());
                 player.readFromClient();
             }
+            else if (!answer.equalsIgnoreCase(currentCategory.get(i).getAnswer())) {
+                player.writeToClient("INCORRECT_ANSWER");
+                player.writeToClient(answer);
+                player.readFromClient();
+            }
         }
         player.addToTotalScore(player.getRoundScore());
     }

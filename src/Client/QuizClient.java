@@ -150,12 +150,32 @@ public class QuizClient extends JFrame implements ActionListener {
                         } else if (button4.getText().equals(correctAnswer)) {
                             button4.setBackground(Color.GREEN);
                         }
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         button1.setBackground(new Color(186, 179, 179));
                         button2.setBackground(new Color(186, 179, 179));
                         button3.setBackground(new Color(186, 179, 179));
                         button4.setBackground(new Color(186, 179, 179));
                         writeToServer("NEXT_QUESTION");
+                    }
+
+                    case INCORRECT_ANSWER -> {
+                        String incorrectAnswer = readFromServer();
+                        if (button1.getText().equals(incorrectAnswer)) {
+                            button1.setBackground(Color.RED);
+                        } else if (button2.getText().equals(incorrectAnswer)) {
+                            button2.setBackground(Color.RED);
+                        } else if (button3.getText().equals(incorrectAnswer)) {
+                            button3.setBackground(Color.RED);
+                        } else if (button4.getText().equals(incorrectAnswer)) {
+                            button4.setBackground(Color.RED);
+                        }
+                        Thread.sleep(1000);
+                        button1.setBackground(new Color(186, 179, 179));
+                        button2.setBackground(new Color(186, 179, 179));
+                        button3.setBackground(new Color(186, 179, 179));
+                        button4.setBackground(new Color(186, 179, 179));
+                        writeToServer("NEXT_QUESTION");
+
                     }
                     default -> System.out.println("ERROR! UNKNOWN INSTRUCTION");
                 }
