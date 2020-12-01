@@ -134,31 +134,18 @@ public class QuizClient extends JFrame implements ActionListener {
                     case CORRECT_ANSWER -> {
                         String correctAnswer = readFromServer();
                         JButton correctButton = getButton(correctAnswer);
-                        correctButton.setBackground(Color.green);
-                        /*
-                        if (button1.getText().equals(correctAnswer)) {
-                            button1.setBackground(Color.GREEN);
-                        } else if (button2.getText().equals(correctAnswer)) {
-                            button2.setBackground(Color.GREEN);
-                        } else if (button3.getText().equals(correctAnswer)) {
-                            button3.setBackground(Color.GREEN);
-                        } else if (button4.getText().equals(correctAnswer)) {
-                            button4.setBackground(Color.GREEN);
-                        }
+                        setButtonColor(correctButton, Color.GREEN);
                         Thread.sleep(1000);
-                        resetButtonColor();
+                        setButtonColor(correctButton, buttonBackgroundColor);
                         writeToServer("NEXT_QUESTION");
                     }
 
                     case INCORRECT_ANSWER -> {
                         String incorrectAnswer = readFromServer();
                         JButton incorrectButton = getButton(incorrectAnswer);
-                        incorrectButton.setBackground(Color.red);
+                        setButtonColor(incorrectButton, Color.RED);
                         Thread.sleep(1000);
-                        button1.setBackground(new Color(186, 179, 179));
-                        button2.setBackground(new Color(186, 179, 179));
-                        button3.setBackground(new Color(186, 179, 179));
-                        button4.setBackground(new Color(186, 179, 179));
+                        setButtonColor(incorrectButton, buttonBackgroundColor);
                         writeToServer("NEXT_QUESTION");
 
                     }
@@ -170,10 +157,8 @@ public class QuizClient extends JFrame implements ActionListener {
         }
     }
 
-    public void resetButtonColor() {
-        for (JButton button : buttonList) {
-            button.setBackground(buttonBackgroundColor);
-        }
+    public void setButtonColor(JButton button, Color color) {
+        button.setBackground(color);
     }
 
     public static void main(String[] args) throws Exception {
