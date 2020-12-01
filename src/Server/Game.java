@@ -84,12 +84,12 @@ public class Game extends Thread {
             String answer = player.readFromClient();
             if (answer.equalsIgnoreCase(currentCategory.get(i).getAnswer())) {
                 player.setRoundScore(player.getRoundScore() + 1);
-                player.writeToClient("CORRECT_ANSWER");
-                player.writeToClient(currentCategory.get(i).getAnswer());
+                player.writeToClient(ServerInstruction.CORRECT_ANSWER.name());
+                player.writeToClient(answer);
                 player.readFromClient();
             }
             else if (!answer.equalsIgnoreCase(currentCategory.get(i).getAnswer())) {
-                player.writeToClient("INCORRECT_ANSWER");
+                player.writeToClient(ServerInstruction.INCORRECT_ANSWER.name());
                 player.writeToClient(answer);
                 player.readFromClient();
             }
