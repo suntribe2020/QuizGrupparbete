@@ -53,14 +53,14 @@ public class QuizClient extends JFrame implements ActionListener {
 
 
         //Här syns det vilken fråga i ronden man är på.
-        textfield.setBounds(0, 0, 650, 50);
-        textfield.setBackground(new Color(255, 255, 255));
-        textfield.setForeground(new Color(3, 3, 3));
-        textfield.setFont(new Font("Geeza Pro", Font.BOLD, 15));
+        textField.setBounds(0, 0, 650, 50);
+        textField.setBackground(new Color(255, 255, 255));
+        textField.setForeground(new Color(3, 3, 3));
+        textField.setFont(new Font("Geeza Pro", Font.BOLD, 15));
         //textfield.setBorder(BorderFactory.createBevelBorder(1));
-        textfield.setHorizontalAlignment(JTextField.CENTER);
-        textfield.setEditable(false);
-        textfield.setText("Waiting for other player");
+        textField.setHorizontalAlignment(JTextField.CENTER);
+        textField.setEditable(false);
+        textField.setText("Waiting for other player");
 
         createButton(button1,"", 15, 100);
         createButton(button2,"", 315, 100);
@@ -71,7 +71,7 @@ public class QuizClient extends JFrame implements ActionListener {
         frame.add(button2);
         frame.add(button3);
         frame.add(button4);
-        frame.add(textfield);
+        frame.add(textField);
         frame.setVisible(true);
     }
 
@@ -79,7 +79,7 @@ public class QuizClient extends JFrame implements ActionListener {
         try {
             System.out.println("Started client");
             String welcomeMessage = readFromServer();
-            textfield.setText(welcomeMessage);
+            textField.setText(welcomeMessage);
 
             /**
              * First message from server is always the ServerInstruction enum
@@ -91,12 +91,12 @@ public class QuizClient extends JFrame implements ActionListener {
                 switch (serverInstruction) {
                     // server requests category from first player
                     case FIRST_PLAYER_ROUND_START -> {
-                        textfield.setText(readFromServer());
+                        textField.setText(readFromServer());
                         setCategoriesOnButtons();
                     }
                     // server requests second player to initiate a new round
                     case SECOND_PLAYER_ROUND_START -> {
-                        textfield.setText(readFromServer());
+                        textField.setText(readFromServer());
                         button1.setText("yes");
                         button2.setText("ready");
                         button3.setText("sure thing");
@@ -104,13 +104,14 @@ public class QuizClient extends JFrame implements ActionListener {
                     }
                     // server reports first player score
                     case FIRST_PLAYER_SCORE -> {
-                        textfield.setText(readFromServer());
+                        textField.setText(readFromServer());
                         setAllBlankButtons();
                     }
                     // server reports second player score and await input to start second player round,
                     // this to not overwrite the textfield displaying the score, before next round starts
                     case SECOND_PLAYER_SCORE -> {
-                        textfield.setText(readFromServer());
+                        textField.setText(readFromServer());
+
                         button1.setText("ok");
                         button2.setText("ok");
                         button3.setText("ok");
