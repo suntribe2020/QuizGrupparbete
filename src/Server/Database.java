@@ -2,9 +2,7 @@ package Server;
 
 import Server.properties.PropertiesHandler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Database {
 
@@ -28,10 +26,7 @@ public class Database {
     private static int NUMBER_OF_QUESTIONS = 0;
     private static int NUMBER_OF_ROUNDS = 0;
 
-    private static List<Question> musicQuestions = new ArrayList<>();
-    private static List<Question> filmQuestions = new ArrayList<>();
-    private static List<Question> gameQuestions = new ArrayList<>();
-    private static List<Question> sportQuestions = new ArrayList<>();
+    private static Map<GameCategory, List<Question>> questions = new HashMap<>();
 
     public static void populate() {
         PropertiesHandler.loadProperties();
@@ -40,13 +35,14 @@ public class Database {
         createFilmQuestions();
         createGameQuestions();
         createSportQuestions();
-        Collections.shuffle(musicQuestions);
-        Collections.shuffle(filmQuestions);
-        Collections.shuffle(gameQuestions);
-        Collections.shuffle(sportQuestions);
+    }
+
+    public static List<Question> getQuestions(GameCategory category) {
+        return questions.get(category);
     }
 
     private static void createSportQuestions() {
+        List<Question> sportQuestions = new ArrayList<>();
         sportQuestions.add(new Question("Which team has won the most Premier League titles?",
                 "Manchester United",
                 "Liverpool FC",
@@ -67,9 +63,13 @@ public class Database {
                 "Finland",
                 "Russia",
                 "USA"));
+
+        Collections.shuffle(sportQuestions);
+        questions.put(GameCategory.SPORT, sportQuestions);
     }
 
     private static void createGameQuestions() {
+        List<Question> gameQuestions = new ArrayList<>();
         gameQuestions.add(new Question("How many pieces of triforce does Link have to collect in 'The Legend of Zelda'?",
                 "3",
                 "2",
@@ -90,9 +90,14 @@ public class Database {
                 "KickBack",
                 "TripSack",
                 "PickSmash"));
+
+        Collections.shuffle(gameQuestions);
+        questions.put(GameCategory.GAMES, gameQuestions);
+
     }
 
     private static void createFilmQuestions() {
+        List<Question> filmQuestions = new ArrayList<>();
         filmQuestions.add(new Question("What is the name of the leading actor in the movie 'Interstellar'?",
                 "Matthew McConaughey",
                 "Brad Pitt",
@@ -113,9 +118,13 @@ public class Database {
                 "Adam Sandler",
                 "Harrison Ford",
                 "Kevin Hart"));
+
+        Collections.shuffle(filmQuestions);
+        questions.put(GameCategory.FILM, filmQuestions);
     }
 
     private static void createMusicQuestions() {
+        List<Question> musicQuestions = new ArrayList<>();
         musicQuestions.add(new Question("Which band sings the song 'Smoke On The Water'?",
                 "Deep Purple",
                 "Beatles",
@@ -136,22 +145,9 @@ public class Database {
                 "Slim Shady",
                 "Marshall Matthews",
                 "Matthew Mathers"));
-    }
 
-    public static List<Question> getMusicQuestions() {
-        return musicQuestions;
-    }
-
-    public static List<Question> getFilmQuestions() {
-        return filmQuestions;
-    }
-
-    public static List<Question> getGameQuestions() {
-        return gameQuestions;
-    }
-
-    public static List<Question> getSportQuestions() {
-        return sportQuestions;
+        Collections.shuffle(musicQuestions);
+        questions.put(GameCategory.MUSIC, musicQuestions);
     }
 
     public static int getNumberOfQuestions() {
@@ -169,5 +165,4 @@ public class Database {
     public static void setNumberOfRounds(int numberOfRounds) {
         NUMBER_OF_ROUNDS = numberOfRounds;
     }
-
 }

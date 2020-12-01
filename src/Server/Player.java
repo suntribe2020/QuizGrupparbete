@@ -9,7 +9,6 @@ import java.net.Socket;
 public class Player extends Thread {
 
     char playerSignature;
-    Player opponent;
     Socket socket;
     BufferedReader socketInput;
     PrintWriter socketOutput;
@@ -22,52 +21,8 @@ public class Player extends Thread {
         setUpSocketCommunication();
     }
 
-    public void setOpponent(Player opponent) {
-        this.opponent = opponent;
-    }
-
-    public Player getOpponent() {
-        return opponent;
-    }
-
-    public void otherPlayerMoved(int location) {
-        socketOutput.println("OPPONENT_MOVED " + location);
-    }
-
-
     @Override
-    public void run() {
-        try {
-            while (true) {
-                writeToClient("First message. Hello from player" + this.playerSignature);
-                int questionIndex;
-                String command = socketInput.readLine();
-                if (true) {
-                    System.out.println("ValidMOOOVE");
-                    if (command.startsWith("Musik")) {
-                        questionIndex = Integer.parseInt(command.substring(5));
-                        socketOutput.println(Database.getMusicQuestions().get(questionIndex));
-                    } else if (command.startsWith("Spel")) {
-                        questionIndex = Integer.parseInt(command.substring(4));
-                        socketOutput.println(Database.getGameQuestions().get(questionIndex));
-                    } else if (command.startsWith("Film")) {
-                        questionIndex = Integer.parseInt(command.substring(4));
-                        socketOutput.println(Database.getFilmQuestions().get(questionIndex));
-                    } else if (command.startsWith("Sport")) {
-                        questionIndex = Integer.parseInt(command.substring(5));
-                        socketOutput.println(Database.getSportQuestions().get(questionIndex));
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-            }
-        }
-    }
+    public void run() {}
 
     private void setUpSocketCommunication() {
         try {

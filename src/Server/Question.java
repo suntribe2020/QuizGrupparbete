@@ -32,29 +32,10 @@ public class Question {
         answers.add(wrongAnswer3);
     }
 
-    public List<String> getAnswers() {
-        return answers;
-    }
-
     public String getAnswer() {
         return answer;
     }
 
-    public String getQuestion() {
-        return question;
-    }
-
-    public String getWrongAnswer1() {
-        return wrongAnswer1;
-    }
-
-    public String getWrongAnswer2() {
-        return wrongAnswer2;
-    }
-
-    public String getWrongAnswer3() {
-        return wrongAnswer3;
-    }
     public void shuffleAnswers(){
         Collections.shuffle(answers);
     }
