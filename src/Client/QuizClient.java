@@ -21,6 +21,8 @@ public class QuizClient extends JFrame implements ActionListener {
     JFrame frame = new JFrame();
     JTextField textField = new JTextField();
     JTextArea textarea = new JTextArea();
+    private final List<JButton> buttonList = new ArrayList<>();
+    private final Color buttonBackgroundColor = new Color(186, 179, 179);
 
     private JButton button1 = new JButton();
     private JButton button2 = new JButton();
@@ -237,6 +239,7 @@ public class QuizClient extends JFrame implements ActionListener {
         but.setFocusable(false);
         but.addActionListener(this);
         but.setText(butText);
+        buttonList.add(but);
     }
 
     private void setAllBlankButtons(){
