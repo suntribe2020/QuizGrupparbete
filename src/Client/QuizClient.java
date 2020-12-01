@@ -1,6 +1,7 @@
 package Client;
 
 import Server.Database;
+import Server.Question;
 import Server.ServerInstruction;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Timer;
 
 public class QuizClient extends JFrame implements ActionListener {
 
@@ -137,6 +139,24 @@ public class QuizClient extends JFrame implements ActionListener {
                         button3.setText(readFromServer());
                         button4.setText(readFromServer());
                     }
+                    case CORRECT_ANSWER -> {
+                        String correctAnswer = readFromServer();
+                        if (button1.getText().equals(correctAnswer)) {
+                            button1.setBackground(Color.GREEN);
+                        } else if (button2.getText().equals(correctAnswer)) {
+                            button2.setBackground(Color.GREEN);
+                        } else if (button3.getText().equals(correctAnswer)) {
+                            button3.setBackground(Color.GREEN);
+                        } else if (button4.getText().equals(correctAnswer)) {
+                            button4.setBackground(Color.GREEN);
+                        }
+                        Thread.sleep(2000);
+                        button1.setBackground(new Color(186, 179, 179));
+                        button2.setBackground(new Color(186, 179, 179));
+                        button3.setBackground(new Color(186, 179, 179));
+                        button4.setBackground(new Color(186, 179, 179));
+                        writeToServer("NEXT_QUESTION");
+                    }
                     default -> System.out.println("ERROR! UNKNOWN INSTRUCTION");
                 }
             }
@@ -158,6 +178,8 @@ public class QuizClient extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+
             if (e.getSource() == button1) {
                 writeToServer(button1.getText());
             } else if (e.getSource() == button2) {
