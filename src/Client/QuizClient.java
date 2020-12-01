@@ -119,7 +119,7 @@ public class QuizClient extends JFrame implements ActionListener {
                     }
                     // the game is over
                     case GAME_ENDED -> {
-                        textfield.setText(readFromServer());
+                        textField.setText(readFromServer());
                         setAllBlankButtons();
                         System.out.println("gameover");
                         return;
@@ -133,6 +133,9 @@ public class QuizClient extends JFrame implements ActionListener {
                     }
                     case CORRECT_ANSWER -> {
                         String correctAnswer = readFromServer();
+                        JButton correctButton = getButton(correctAnswer);
+                        correctButton.setBackground(Color.green);
+                        /*
                         if (button1.getText().equals(correctAnswer)) {
                             button1.setBackground(Color.GREEN);
                         } else if (button2.getText().equals(correctAnswer)) {
@@ -152,15 +155,8 @@ public class QuizClient extends JFrame implements ActionListener {
 
                     case INCORRECT_ANSWER -> {
                         String incorrectAnswer = readFromServer();
-                        if (button1.getText().equals(incorrectAnswer)) {
-                            button1.setBackground(Color.RED);
-                        } else if (button2.getText().equals(incorrectAnswer)) {
-                            button2.setBackground(Color.RED);
-                        } else if (button3.getText().equals(incorrectAnswer)) {
-                            button3.setBackground(Color.RED);
-                        } else if (button4.getText().equals(incorrectAnswer)) {
-                            button4.setBackground(Color.RED);
-                        }
+                        JButton incorrectButton = getButton(incorrectAnswer);
+                        incorrectButton.setBackground(Color.red);
                         Thread.sleep(1000);
                         button1.setBackground(new Color(186, 179, 179));
                         button2.setBackground(new Color(186, 179, 179));
