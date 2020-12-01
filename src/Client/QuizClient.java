@@ -24,13 +24,13 @@ public class QuizClient extends JFrame implements ActionListener {
     private final List<JButton> buttonList = new ArrayList<>();
     private final Color buttonBackgroundColor = new Color(186, 179, 179);
 
-    private JButton button1 = new JButton();
-    private JButton button2 = new JButton();
-    private JButton button3 = new JButton();
-    private JButton button4 = new JButton();
+    private final JButton button1 = new JButton();
+    private final JButton button2 = new JButton();
+    private final JButton button3 = new JButton();
+    private final JButton button4 = new JButton();
 
-    private int portNr;
-    private String serverAddress;
+    private final int portNr;
+    private final String serverAddress;
     private Socket socket;
     private BufferedReader socketInput;
     private PrintWriter socketOutput;
