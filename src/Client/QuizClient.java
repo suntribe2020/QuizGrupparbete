@@ -1,7 +1,6 @@
 package Client;
 
 import Server.Database;
-import Server.Question;
 import Server.ServerInstruction;
 
 import javax.swing.*;
@@ -13,8 +12,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.Timer;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class QuizClient extends JFrame implements ActionListener {
 
