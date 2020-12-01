@@ -67,10 +67,9 @@ public class QuizClient extends JFrame implements ActionListener {
         createButton(button3,"", 15, 350);
         createButton(button4,"", 315, 350);
 
-        frame.add(button1);
-        frame.add(button2);
-        frame.add(button3);
-        frame.add(button4);
+        for(JButton button: buttonList){
+            frame.add(button);
+        }
         frame.add(textField);
         frame.setVisible(true);
     }
