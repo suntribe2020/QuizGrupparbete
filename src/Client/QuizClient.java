@@ -146,10 +146,7 @@ public class QuizClient extends JFrame implements ActionListener {
                             button4.setBackground(Color.GREEN);
                         }
                         Thread.sleep(1000);
-                        button1.setBackground(new Color(186, 179, 179));
-                        button2.setBackground(new Color(186, 179, 179));
-                        button3.setBackground(new Color(186, 179, 179));
-                        button4.setBackground(new Color(186, 179, 179));
+                        resetButtonColor();
                         writeToServer("NEXT_QUESTION");
                     }
 
@@ -170,6 +167,12 @@ public class QuizClient extends JFrame implements ActionListener {
             }
         } finally {
             socket.close();
+        }
+    }
+
+    public void resetButtonColor() {
+        for (JButton button : buttonList) {
+            button.setBackground(buttonBackgroundColor);
         }
     }
 
