@@ -18,7 +18,6 @@ import java.util.List;
 
 public class QuizClient extends JFrame implements ActionListener {
 
-    JFrame frame = new JFrame();
     JTextField textField = new JTextField();
     JTextArea textarea = new JTextArea();
     private final List<JButton> buttonList = new ArrayList<>();
@@ -44,12 +43,12 @@ public class QuizClient extends JFrame implements ActionListener {
     }
 
     private void setUpGameBoard() {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(650, 650);
-        frame.getContentPane().setBackground(new Color(193, 186, 186));
-        frame.setLayout(null);
-        frame.setResizable(false);
-        frame.setTitle("Quizkampen");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(650, 650);
+        getContentPane().setBackground(new Color(193, 186, 186));
+        setLayout(null);
+        setResizable(false);
+        setTitle("Quizkampen");
 
 
         //Här syns det vilken fråga i ronden man är på.
@@ -68,10 +67,10 @@ public class QuizClient extends JFrame implements ActionListener {
         createButton(button4,"", 315, 350);
 
         for(JButton button: buttonList){
-            frame.add(button);
+            add(button);
         }
-        frame.add(textField);
-        frame.setVisible(true);
+        add(textField);
+        setVisible(true);
     }
 
     public void play () throws Exception {
