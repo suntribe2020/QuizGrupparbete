@@ -19,33 +19,24 @@ import java.util.Timer;
 public class QuizClient extends JFrame implements ActionListener {
 
     JFrame frame = new JFrame();
-    JTextField textfield = new JTextField();
+    JTextField textField = new JTextField();
     JTextArea textarea = new JTextArea();
 
-    JButton button1 = new JButton();
-    JButton button2 = new JButton();
-    JButton button3 = new JButton();
-    JButton button4 = new JButton();
+    private JButton button1 = new JButton();
+    private JButton button2 = new JButton();
+    private JButton button3 = new JButton();
+    private JButton button4 = new JButton();
 
-    /*JLabel answer_label1 = new JLabel();
-    JLabel answer_label2 = new JLabel();
-    JLabel answer_label3 = new JLabel();
-    JLabel answer_label4 = new JLabel();
-    JLabel time_label = new JLabel();
-    JLabel seconds_left = new JLabel();
-    JTextField number_right = new JTextField();
-    */
-
-    private int counter = 0;
-    int portNr;
-    String serverAdress;
+    private int portNr;
+    private String serverAddress;
     private Socket socket;
     private BufferedReader socketInput;
     private PrintWriter socketOutput;
     private int questionIndex = 0;
 
-    public QuizClient(String serverAdress, int portNr) {
-        this.serverAdress = serverAdress;
+
+    public QuizClient(String serverAddress, int portNr) {
+        this.serverAddress = serverAddress;
         this.portNr = portNr;
         setUpGameBoard();
         setUpSocketCommunication();
