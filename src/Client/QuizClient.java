@@ -151,7 +151,7 @@ public class QuizClient extends JFrame implements ActionListener {
         }
     }
 
-    public void setButtonColor(JButton button, Color color) {
+    private void setButtonColor(JButton button, Color color) {
         button.setBackground(color);
     }
 
@@ -164,7 +164,6 @@ public class QuizClient extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
 
             if (e.getSource() == button1) {
                 writeToServer(button1.getText());
@@ -219,6 +218,7 @@ public class QuizClient extends JFrame implements ActionListener {
             button.setText(message);
         }
     }
+
     private void setCategoriesOnButtons(){
         button1.setText(Database.GameCategory.MUSIC.toString());
         button2.setText(Database.GameCategory.FILM.toString());
@@ -226,11 +226,9 @@ public class QuizClient extends JFrame implements ActionListener {
         button4.setText(Database.GameCategory.SPORT.toString());
     }
 
-    public JButton getButton(String answer){
+    private JButton getButton(String answer){
         for(JButton button: buttonList){
             if(button.getText().equalsIgnoreCase(answer)) return button;
         } return null;
     }
-
-
 }
