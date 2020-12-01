@@ -34,7 +34,6 @@ public class QuizClient extends JFrame implements ActionListener {
     private Socket socket;
     private BufferedReader socketInput;
     private PrintWriter socketOutput;
-    private int questionIndex = 0;
 
 
     public QuizClient(String serverAddress, int portNr) {
