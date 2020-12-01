@@ -4,6 +4,9 @@ import Server.Database;
 import Server.ServerInstruction;
 
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +22,8 @@ import java.util.List;
 public class QuizClient extends JFrame implements ActionListener {
 
     JTextField textField = new JTextField();
-    JTextArea textarea = new JTextArea();
+    JTextArea textArea = new JTextArea();
+    JTextPane textPane = new JTextPane();
     private final List<JButton> buttonList = new ArrayList<>();
     private final Color buttonBackgroundColor = new Color(186, 179, 179);
     private final Font font = new Font("Geeza Pro", Font.BOLD, 15);
@@ -51,7 +55,7 @@ public class QuizClient extends JFrame implements ActionListener {
         setResizable(false);
         setTitle("Quizkampen");
 
-
+/*
         //Här syns det vilken fråga i ronden man är på.
         textField.setBounds(0, 0, 650, 50);
         textField.setBackground(Color.WHITE);
@@ -62,6 +66,30 @@ public class QuizClient extends JFrame implements ActionListener {
         textField.setEditable(false);
         textField.setText("Waiting for other player");
 
+
+
+        textArea.setBounds(0, 0, 650, 50);
+        textArea.setBackground(Color.WHITE);
+        textArea.setForeground(Color.BLACK);
+        textArea.setFont(font);
+        //textfield.setBorder(BorderFactory.createBevelBorder(1));
+        textArea.setEditable(false);
+        textArea.setText("Waiting for other player");
+        textArea.setLineWrap(true);
+ */
+        StyledDocument doc = textPane.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(2, doc.getLength(), center, false);
+
+        textPane.setBounds(0, 0, 645, 50);
+        textPane.setBackground(Color.WHITE);
+        textPane.setForeground(Color.BLACK);
+        textPane.setFont(font);
+        textPane.setEditable(false);
+        textPane.setText("Waiting for other player");
+
+
         createButton(button1,"", 15, 100);
         createButton(button2,"", 315, 100);
         createButton(button3,"", 15, 350);
@@ -70,7 +98,7 @@ public class QuizClient extends JFrame implements ActionListener {
         for(JButton button: buttonList){
             add(button);
         }
-        add(textField);
+        add(textPane);
         setVisible(true);
     }
 
@@ -78,7 +106,7 @@ public class QuizClient extends JFrame implements ActionListener {
         try {
             System.out.println("Started client");
             String welcomeMessage = readFromServer();
-            textField.setText(welcomeMessage);
+            textPane.setText(welcomeMessage);
 
             /**
              * First message from server is always the ServerInstruction enum
@@ -90,12 +118,12 @@ public class QuizClient extends JFrame implements ActionListener {
                 switch (serverInstruction) {
                     // server requests category from first player
                     case FIRST_PLAYER_ROUND_START -> {
-                        textField.setText(readFromServer());
+                        textPane.setText(readFromServer());
                         setCategoriesOnButtons();
                     }
                     // server requests second player to initiate a new round
                     case SECOND_PLAYER_ROUND_START -> {
-                        textField.setText(readFromServer());
+                        textPane.setText(readFromServer());
                         button1.setText("yes");
                         button2.setText("ready");
                         button3.setText("sure thing");
@@ -103,25 +131,25 @@ public class QuizClient extends JFrame implements ActionListener {
                     }
                     // server reports first player score
                     case FIRST_PLAYER_SCORE -> {
-                        textField.setText(readFromServer());
+                        textPane.setText(readFromServer());
                         setAllButtonsText("");
                     }
                     // server reports second player score and await input to start second player round,
                     // this to not overwrite the textfield displaying the score, before next round starts
                     case SECOND_PLAYER_SCORE -> {
-                        textField.setText(readFromServer());
+                        textPane.setText(readFromServer());
                         setAllButtonsText("ok");
                     }
                     // the game is over
                     case GAME_ENDED -> {
-                        textField.setText(readFromServer());
+                        textPane.setText(readFromServer());
                         setAllButtonsText("");
                         System.out.println("gameover");
                         return;
                     }
                     // server sends questions
                     case QUESTION -> {
-                        textField.setText(readFromServer());
+                        textPane.setText(readFromServer());
                         for(JButton button: buttonList){
                             button.setText(readFromServer());
                         }
