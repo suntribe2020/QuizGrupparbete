@@ -6,5 +6,7 @@ public enum ServerInstruction {
     SECOND_PLAYER_SCORE,
     SECOND_PLAYER_ROUND_START,
     GAME_ENDED,
+    CORRECT_ANSWER,
+    INCORRECT_ANSWER,
     QUESTION;
 }
