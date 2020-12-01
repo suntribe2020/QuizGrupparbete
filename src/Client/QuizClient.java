@@ -126,11 +126,10 @@ public class QuizClient extends JFrame implements ActionListener {
                     }
                     // server sends questions
                     case QUESTION -> {
-                        textfield.setText(readFromServer());
-                        button1.setText(readFromServer());
-                        button2.setText(readFromServer());
-                        button3.setText(readFromServer());
-                        button4.setText(readFromServer());
+                        textField.setText(readFromServer());
+                        for(JButton button: buttonList){
+                            button.setText(readFromServer());
+                        }
                     }
                     case CORRECT_ANSWER -> {
                         String correctAnswer = readFromServer();
