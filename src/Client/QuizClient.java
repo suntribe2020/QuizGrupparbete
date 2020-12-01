@@ -253,4 +253,12 @@ public class QuizClient extends JFrame implements ActionListener {
         button3.setText(Database.GameCategory.GAMES.toString());
         button4.setText(Database.GameCategory.SPORT.toString());
     }
+
+    public JButton getButton(String answer){
+        for(JButton button: buttonList){
+            if(button.getText().equalsIgnoreCase(answer)) return button;
+        } return null;
+    }
+
+
 }
