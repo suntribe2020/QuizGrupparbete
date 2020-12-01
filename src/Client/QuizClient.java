@@ -167,10 +167,6 @@ public class QuizClient extends JFrame implements ActionListener {
         client.play();
     }
 
-    private void sendAnswerToServer(Scanner scanner) {
-        String answer = scanner.nextLine();
-        writeToServer(answer);
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -189,7 +185,7 @@ public class QuizClient extends JFrame implements ActionListener {
 
     private void setUpSocketCommunication() {
         try {
-            this.socket = new Socket(this.serverAdress, this.portNr);
+            this.socket = new Socket(this.serverAddress, this.portNr);
             generateSocketReader();
             generateSocketWriter();
         } catch (IOException e) {
@@ -226,10 +222,9 @@ public class QuizClient extends JFrame implements ActionListener {
     }
 
     private void setAllBlankButtons(){
-        button1.setText("");
-        button2.setText("");
-        button3.setText("");
-        button4.setText("");
+        for(JButton button: buttonList) {
+            button.setText("");
+        }
     }
     private void setCategoriesOnButtons(){
         button1.setText(Database.GameCategory.MUSIC.toString());
