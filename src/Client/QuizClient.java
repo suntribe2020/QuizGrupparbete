@@ -105,22 +105,18 @@ public class QuizClient extends JFrame implements ActionListener {
                     // server reports first player score
                     case FIRST_PLAYER_SCORE -> {
                         textField.setText(readFromServer());
-                        setAllBlankButtons();
+                        setAllButtonsText("");
                     }
                     // server reports second player score and await input to start second player round,
                     // this to not overwrite the textfield displaying the score, before next round starts
                     case SECOND_PLAYER_SCORE -> {
                         textField.setText(readFromServer());
-
-                        button1.setText("ok");
-                        button2.setText("ok");
-                        button3.setText("ok");
-                        button4.setText("ok");
+                        setAllButtonsText("ok");
                     }
                     // the game is over
                     case GAME_ENDED -> {
                         textField.setText(readFromServer());
-                        setAllBlankButtons();
+                        setAllButtonsText("");
                         System.out.println("gameover");
                         return;
                     }
@@ -147,7 +143,6 @@ public class QuizClient extends JFrame implements ActionListener {
                         Thread.sleep(1000);
                         setButtonColor(incorrectButton, buttonBackgroundColor);
                         writeToServer("NEXT_QUESTION");
-
                     }
                     default -> System.out.println("ERROR! UNKNOWN INSTRUCTION");
                 }
@@ -221,9 +216,9 @@ public class QuizClient extends JFrame implements ActionListener {
         buttonList.add(but);
     }
 
-    private void setAllBlankButtons(){
+    private void setAllButtonsText(String message){
         for(JButton button: buttonList) {
-            button.setText("");
+            button.setText(message);
         }
     }
     private void setCategoriesOnButtons(){
