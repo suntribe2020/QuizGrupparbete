@@ -1,10 +1,12 @@
 package Client;
 
 import Server.Database;
-import Server.Question;
 import Server.ServerInstruction;
 
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,81 +15,98 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.Timer;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class QuizClient extends JFrame implements ActionListener {
 
-    JFrame frame = new JFrame();
-    JTextField textfield = new JTextField();
-    JTextArea textarea = new JTextArea();
+    JTextField textField = new JTextField();
+    JTextArea textArea = new JTextArea();
+    JTextPane textPane = new JTextPane();
+    private final List<JButton> buttonList = new ArrayList<>();
+    private final Color buttonBackgroundColor = new Color(186, 179, 179);
+    private final Font font = new Font("Geeza Pro", Font.BOLD, 15);
 
-    JButton button1 = new JButton();
-    JButton button2 = new JButton();
-    JButton button3 = new JButton();
-    JButton button4 = new JButton();
+    private final JButton button1 = new JButton();
+    private final JButton button2 = new JButton();
+    private final JButton button3 = new JButton();
+    private final JButton button4 = new JButton();
 
-    /*JLabel answer_label1 = new JLabel();
-    JLabel answer_label2 = new JLabel();
-    JLabel answer_label3 = new JLabel();
-    JLabel answer_label4 = new JLabel();
-    JLabel time_label = new JLabel();
-    JLabel seconds_left = new JLabel();
-    JTextField number_right = new JTextField();
-    */
-
-    private int counter = 0;
-    int portNr;
-    String serverAdress;
+    private final int portNr;
+    private final String serverAddress;
     private Socket socket;
     private BufferedReader socketInput;
     private PrintWriter socketOutput;
-    private int questionIndex = 0;
 
-    public QuizClient(String serverAdress, int portNr) {
-        this.serverAdress = serverAdress;
+
+    public QuizClient(String serverAddress, int portNr) {
+        this.serverAddress = serverAddress;
         this.portNr = portNr;
         setUpGameBoard();
         setUpSocketCommunication();
     }
 
     private void setUpGameBoard() {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(650, 650);
-        frame.getContentPane().setBackground(new Color(193, 186, 186));
-        frame.setLayout(null);
-        frame.setResizable(false);
-        frame.setTitle("Quizkampen");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(650, 650);
+        getContentPane().setBackground(new Color(193, 186, 186));
+        setLayout(null);
+        setResizable(false);
+        setTitle("Quizkampen");
 
-
+/*
         //Här syns det vilken fråga i ronden man är på.
-        textfield.setBounds(0, 0, 650, 50);
-        textfield.setBackground(new Color(255, 255, 255));
-        textfield.setForeground(new Color(3, 3, 3));
-        textfield.setFont(new Font("Geeza Pro", Font.BOLD, 15));
+        textField.setBounds(0, 0, 650, 50);
+        textField.setBackground(Color.WHITE);
+        textField.setForeground(Color.BLACK);
+        textField.setFont(font);
         //textfield.setBorder(BorderFactory.createBevelBorder(1));
-        textfield.setHorizontalAlignment(JTextField.CENTER);
-        textfield.setEditable(false);
-        textfield.setText("Waiting for other player");
+        textField.setHorizontalAlignment(JTextField.CENTER);
+        textField.setEditable(false);
+        textField.setText("Waiting for other player");
+
+
+
+        textArea.setBounds(0, 0, 650, 50);
+        textArea.setBackground(Color.WHITE);
+        textArea.setForeground(Color.BLACK);
+        textArea.setFont(font);
+        //textfield.setBorder(BorderFactory.createBevelBorder(1));
+        textArea.setEditable(false);
+        textArea.setText("Waiting for other player");
+        textArea.setLineWrap(true);
+ */
+        StyledDocument doc = textPane.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(2, doc.getLength(), center, false);
+
+        textPane.setBounds(0, 0, 645, 50);
+        textPane.setBackground(Color.WHITE);
+        textPane.setForeground(Color.BLACK);
+        textPane.setFont(font);
+        textPane.setEditable(false);
+        textPane.setText("Waiting for other player");
+
 
         createButton(button1,"", 15, 100);
         createButton(button2,"", 315, 100);
         createButton(button3,"", 15, 350);
         createButton(button4,"", 315, 350);
 
-        frame.add(button1);
-        frame.add(button2);
-        frame.add(button3);
-        frame.add(button4);
-        frame.add(textfield);
-        frame.setVisible(true);
+        for(JButton button: buttonList){
+            add(button);
+        }
+        add(textPane);
+        setVisible(true);
     }
 
     public void play () throws Exception {
         try {
             System.out.println("Started client");
             String welcomeMessage = readFromServer();
-            textfield.setText(welcomeMessage);
+            textPane.setText(welcomeMessage);
 
             /**
              * First message from server is always the ServerInstruction enum
@@ -99,12 +118,12 @@ public class QuizClient extends JFrame implements ActionListener {
                 switch (serverInstruction) {
                     // server requests category from first player
                     case FIRST_PLAYER_ROUND_START -> {
-                        textfield.setText(readFromServer());
+                        textPane.setText(readFromServer());
                         setCategoriesOnButtons();
                     }
                     // server requests second player to initiate a new round
                     case SECOND_PLAYER_ROUND_START -> {
-                        textfield.setText(readFromServer());
+                        textPane.setText(readFromServer());
                         button1.setText("yes");
                         button2.setText("ready");
                         button3.setText("sure thing");
@@ -112,70 +131,45 @@ public class QuizClient extends JFrame implements ActionListener {
                     }
                     // server reports first player score
                     case FIRST_PLAYER_SCORE -> {
-                        textfield.setText(readFromServer());
-                        setAllBlankButtons();
+                        textPane.setText(readFromServer());
+                        setAllButtonsText("");
                     }
                     // server reports second player score and await input to start second player round,
                     // this to not overwrite the textfield displaying the score, before next round starts
                     case SECOND_PLAYER_SCORE -> {
-                        textfield.setText(readFromServer());
-                        button1.setText("ok");
-                        button2.setText("ok");
-                        button3.setText("ok");
-                        button4.setText("ok");
+                        textPane.setText(readFromServer());
+                        setAllButtonsText("ok");
                     }
                     // the game is over
                     case GAME_ENDED -> {
-                        textfield.setText(readFromServer());
-                        setAllBlankButtons();
+                        textPane.setText(readFromServer());
+                        setAllButtonsText("");
                         System.out.println("gameover");
                         return;
                     }
                     // server sends questions
                     case QUESTION -> {
-                        textfield.setText(readFromServer());
-                        button1.setText(readFromServer());
-                        button2.setText(readFromServer());
-                        button3.setText(readFromServer());
-                        button4.setText(readFromServer());
+                        textPane.setText(readFromServer());
+                        for(JButton button: buttonList){
+                            button.setText(readFromServer());
+                        }
                     }
                     case CORRECT_ANSWER -> {
                         String correctAnswer = readFromServer();
-                        if (button1.getText().equals(correctAnswer)) {
-                            button1.setBackground(Color.GREEN);
-                        } else if (button2.getText().equals(correctAnswer)) {
-                            button2.setBackground(Color.GREEN);
-                        } else if (button3.getText().equals(correctAnswer)) {
-                            button3.setBackground(Color.GREEN);
-                        } else if (button4.getText().equals(correctAnswer)) {
-                            button4.setBackground(Color.GREEN);
-                        }
+                        JButton correctButton = getButton(correctAnswer);
+                        setButtonColor(correctButton, Color.GREEN);
                         Thread.sleep(1000);
-                        button1.setBackground(new Color(186, 179, 179));
-                        button2.setBackground(new Color(186, 179, 179));
-                        button3.setBackground(new Color(186, 179, 179));
-                        button4.setBackground(new Color(186, 179, 179));
+                        setButtonColor(correctButton, buttonBackgroundColor);
                         writeToServer("NEXT_QUESTION");
                     }
 
                     case INCORRECT_ANSWER -> {
                         String incorrectAnswer = readFromServer();
-                        if (button1.getText().equals(incorrectAnswer)) {
-                            button1.setBackground(Color.RED);
-                        } else if (button2.getText().equals(incorrectAnswer)) {
-                            button2.setBackground(Color.RED);
-                        } else if (button3.getText().equals(incorrectAnswer)) {
-                            button3.setBackground(Color.RED);
-                        } else if (button4.getText().equals(incorrectAnswer)) {
-                            button4.setBackground(Color.RED);
-                        }
+                        JButton incorrectButton = getButton(incorrectAnswer);
+                        setButtonColor(incorrectButton, Color.RED);
                         Thread.sleep(1000);
-                        button1.setBackground(new Color(186, 179, 179));
-                        button2.setBackground(new Color(186, 179, 179));
-                        button3.setBackground(new Color(186, 179, 179));
-                        button4.setBackground(new Color(186, 179, 179));
+                        setButtonColor(incorrectButton, buttonBackgroundColor);
                         writeToServer("NEXT_QUESTION");
-
                     }
                     default -> System.out.println("ERROR! UNKNOWN INSTRUCTION");
                 }
@@ -185,20 +179,19 @@ public class QuizClient extends JFrame implements ActionListener {
         }
     }
 
+    private void setButtonColor(JButton button, Color color) {
+        button.setBackground(color);
+    }
+
     public static void main(String[] args) throws Exception {
         String serverAddress = (args.length == 0) ? "localhost" : args[1];
         QuizClient client = new QuizClient(serverAddress, 54448);
         client.play();
     }
 
-    private void sendAnswerToServer(Scanner scanner) {
-        String answer = scanner.nextLine();
-        writeToServer(answer);
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
 
             if (e.getSource() == button1) {
                 writeToServer(button1.getText());
@@ -213,7 +206,7 @@ public class QuizClient extends JFrame implements ActionListener {
 
     private void setUpSocketCommunication() {
         try {
-            this.socket = new Socket(this.serverAdress, this.portNr);
+            this.socket = new Socket(this.serverAddress, this.portNr);
             generateSocketReader();
             generateSocketWriter();
         } catch (IOException e) {
@@ -239,25 +232,31 @@ public class QuizClient extends JFrame implements ActionListener {
     }
 
     private void createButton(JButton but, String butText, int x, int y){
-        Color backgroundColor = new Color(186, 179, 179);
         but.setBounds(x, y, 300, 250);
-        but.setFont(new Font("Geeza Pro", Font.BOLD, 15));
-        but.setBackground(backgroundColor);
+        but.setFont(font);
+        but.setBackground(buttonBackgroundColor);
         but.setFocusable(false);
         but.addActionListener(this);
         but.setText(butText);
+        buttonList.add(but);
     }
 
-    private void setAllBlankButtons(){
-        button1.setText("");
-        button2.setText("");
-        button3.setText("");
-        button4.setText("");
+    private void setAllButtonsText(String message){
+        for(JButton button: buttonList) {
+            button.setText(message);
+        }
     }
+
     private void setCategoriesOnButtons(){
         button1.setText(Database.GameCategory.MUSIC.toString());
         button2.setText(Database.GameCategory.FILM.toString());
         button3.setText(Database.GameCategory.GAMES.toString());
         button4.setText(Database.GameCategory.SPORT.toString());
+    }
+
+    private JButton getButton(String answer){
+        for(JButton button: buttonList){
+            if(button.getText().equalsIgnoreCase(answer)) return button;
+        } return null;
     }
 }
