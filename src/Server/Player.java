@@ -6,12 +6,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+
 public class Player extends Thread {
 
-    char playerSignature;
-    Socket socket;
-    BufferedReader socketInput;
-    PrintWriter socketOutput;
+    private char playerSignature;
+    private Socket socket;
+    private BufferedReader socketInput;
+    private PrintWriter socketOutput;
     private int roundScore=0;
     private int totalScore=0;
 
@@ -65,5 +66,9 @@ public class Player extends Thread {
 
     public int getTotalScore() {
         return totalScore;
+    }
+
+    public char getPlayerSignature() {
+        return playerSignature;
     }
 }
