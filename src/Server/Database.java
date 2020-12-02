@@ -29,7 +29,7 @@ public class Database {
     private static Map<GameCategory, List<Question>> questions = new HashMap<>();
 
     public static void populate() {
-        PropertiesHandler.loadProperties();
+        PropertiesHandler.applyProperties();
 
         createMusicQuestions();
         createFilmQuestions();
