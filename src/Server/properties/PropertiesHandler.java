@@ -10,7 +10,8 @@ import java.util.Properties;
 
 public class PropertiesHandler {
 
-    public static Properties getProperties() {
+    // read and return properties from properties file
+    private static Properties loadProperties() {
         Properties properties = new Properties();
         try (InputStream in = new FileInputStream("properties/server.properties")) {
             properties.load(in);
@@ -20,8 +21,10 @@ public class PropertiesHandler {
         return properties;
     }
 
-    public static void loadProperties() {
-        Properties properties = PropertiesHandler.getProperties();
+    // sets numberOfRounds and numberOfQuestions with a key-value pair,
+    // uses the defaultValue if key is not found in the file
+    public static void applyProperties() {
+        Properties properties = PropertiesHandler.loadProperties();
         Database.setNumberOfRounds(Integer.parseInt(properties.getProperty("NUMBER_OF_ROUNDS", "3")));
         Database.setNumberOfQuestions(Integer.parseInt(properties.getProperty("NUMBER_OF_QUESTIONS", "4")));
     }
