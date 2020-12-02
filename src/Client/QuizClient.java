@@ -118,7 +118,7 @@ public class QuizClient extends JFrame implements ActionListener {
                     }
                     // the game is over
                     case GAME_ENDED -> {
-                        //This message is always the same format. We replace the target with a new line.
+
                         textPane.setText(readFromServer());
                         setAllButtonsText("");
                         System.out.println("gameover");
