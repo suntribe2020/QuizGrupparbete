@@ -22,9 +22,8 @@ import java.util.List;
 
 public class QuizClient extends JFrame implements ActionListener {
 
-    JTextField textField = new JTextField();
-    JTextArea textArea = new JTextArea();
-    JTextPane textPane = new JTextPane();
+
+    private JTextPane textPane = new JTextPane();
     private final List<JButton> buttonList = new ArrayList<>();
     private final Color buttonBackgroundColor = new Color(186, 179, 179);
     private final Font font = new Font("Geeza Pro", Font.BOLD, 15);
@@ -56,33 +55,14 @@ public class QuizClient extends JFrame implements ActionListener {
         setResizable(false);
         setTitle("Quizkampen");
 
-/*
-        //Här syns det vilken fråga i ronden man är på.
-        textField.setBounds(0, 0, 650, 50);
-        textField.setBackground(Color.WHITE);
-        textField.setForeground(Color.BLACK);
-        textField.setFont(font);
-        //textfield.setBorder(BorderFactory.createBevelBorder(1));
-        textField.setHorizontalAlignment(JTextField.CENTER);
-        textField.setEditable(false);
-        textField.setText("Waiting for other player");
 
-
-
-        textArea.setBounds(0, 0, 650, 50);
-        textArea.setBackground(Color.WHITE);
-        textArea.setForeground(Color.BLACK);
-        textArea.setFont(font);
-        //textfield.setBorder(BorderFactory.createBevelBorder(1));
-        textArea.setEditable(false);
-        textArea.setText("Waiting for other player");
-        textArea.setLineWrap(true);
- */
+        //Styling för textpane-objekt
         StyledDocument doc = textPane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(2, doc.getLength(), center, false);
 
+        //Här syns det vilken fråga i ronden man är på.
         textPane.setBounds(0, 0, 645, 50);
         textPane.setBackground(Color.WHITE);
         textPane.setForeground(Color.BLACK);

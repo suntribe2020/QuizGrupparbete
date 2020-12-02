@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 
-public class Player extends Thread {
+public class Player {
 
     private char playerSignature;
     private Socket socket;
@@ -21,9 +21,6 @@ public class Player extends Thread {
         this.playerSignature = playerSignature;
         setUpSocketCommunication();
     }
-
-    @Override
-    public void run() {}
 
     private void setUpSocketCommunication() {
         try {
