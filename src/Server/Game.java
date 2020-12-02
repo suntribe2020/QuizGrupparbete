@@ -95,17 +95,20 @@ public class Game extends Thread {
                     "to play round");
         } else {
             // second score report (with opponent score)
-            firstPlayer.writeToClient("Score this round: " + firstPlayer.getRoundScore() + ". Opponent scored: "
-                    + secondPlayer.getRoundScore());
+            firstPlayer.writeToClient(getRoundAndTotalScoreMessage(firstPlayer, secondPlayer));
         }
     }
 
     public void sendSecondPlayerScore() throws IOException {
         secondPlayer.writeToClient(ServerInstruction.SECOND_PLAYER_SCORE.name());
-        secondPlayer.writeToClient("You scored: " + secondPlayer.getRoundScore() + " this round. The opponent scored: "
-                + firstPlayer.getRoundScore());
+        secondPlayer.writeToClient(getRoundAndTotalScoreMessage(secondPlayer, firstPlayer));
 
         secondPlayer.readFromClient();
+    }
+
+    private String getRoundAndTotalScoreMessage(Player activePlayer, Player passivePlayer) {
+        return "Round score: You: " + activePlayer.getRoundScore() + ". Opponent: "
+                + passivePlayer.getRoundScore() + ". Total score: You: " + activePlayer.getTotalScore() + ". Opponent: " + passivePlayer.getTotalScore();
     }
 
     public boolean checkIfGameOver() {
