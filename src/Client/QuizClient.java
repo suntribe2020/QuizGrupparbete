@@ -83,7 +83,7 @@ public class QuizClient extends JFrame implements ActionListener {
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(2, doc.getLength(), center, false);
 
-        textPane.setBounds(0, 0, 650, 50);
+        textPane.setBounds(0, 0, 645, 50);
         textPane.setBackground(Color.WHITE);
         textPane.setForeground(Color.BLACK);
         textPane.setFont(font);
