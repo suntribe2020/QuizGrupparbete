@@ -118,7 +118,17 @@ public class Game extends Thread {
     public void writeEndMessage(Player player1, Player player2) {
         player1.writeToClient(ServerInstruction.GAME_ENDED.name());
         player1.writeToClient("The game has ended. Your score was " + player1.getTotalScore() + ". Your opponent scored: "
-                + player2.getTotalScore());
+                + player2.getTotalScore() + ". " + getWinOrLossString(player1, player2));
+    }
+
+    public String getWinOrLossString(Player firstPlayer, Player secondPlayer){
+        if(firstPlayer.getTotalScore()>secondPlayer.getTotalScore()){
+            return "You won the game! Good job!";
+        } else if(secondPlayer.getTotalScore()>firstPlayer.getTotalScore()){
+            return "Your opponent won! Better luck next time!";
+        } else {
+            return "You tied!";
+        }
     }
 
     private void flipPlayers() {

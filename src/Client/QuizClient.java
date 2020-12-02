@@ -19,9 +19,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class QuizClient extends JFrame implements ActionListener {
-
 
     private JTextPane textPane = new JTextPane();
     private final List<JButton> buttonList = new ArrayList<>();
@@ -39,7 +37,6 @@ public class QuizClient extends JFrame implements ActionListener {
     private BufferedReader socketInput;
     private PrintWriter socketOutput;
 
-
     public QuizClient(String serverAddress, int portNr) {
         this.serverAddress = serverAddress;
         this.portNr = portNr;
@@ -55,7 +52,6 @@ public class QuizClient extends JFrame implements ActionListener {
         setResizable(false);
         setTitle("Quizkampen");
 
-
         //Styling för textpane-objekt
         StyledDocument doc = textPane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
@@ -69,7 +65,6 @@ public class QuizClient extends JFrame implements ActionListener {
         textPane.setFont(font);
         textPane.setEditable(false);
         textPane.setText("Waiting for other player");
-
 
         createButton(button1,"", 45, 100);
         createButton(button2,"", 350, 100);
@@ -123,7 +118,8 @@ public class QuizClient extends JFrame implements ActionListener {
                     }
                     // the game is over
                     case GAME_ENDED -> {
-                        textPane.setText(readFromServer());
+                        String endGameMessage = readFromServer();
+                        textPane.setText(endGameMessage);
                         setAllButtonsText("");
                         System.out.println("gameover");
                         return;
@@ -169,7 +165,6 @@ public class QuizClient extends JFrame implements ActionListener {
         QuizClient client = new QuizClient(serverAddress, 54448);
         client.play();
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
