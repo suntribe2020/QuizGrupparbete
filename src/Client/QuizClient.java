@@ -4,6 +4,7 @@ import Server.Database;
 import Server.ServerInstruction;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -82,7 +83,7 @@ public class QuizClient extends JFrame implements ActionListener {
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(2, doc.getLength(), center, false);
 
-        textPane.setBounds(0, 0, 645, 50);
+        textPane.setBounds(0, 0, 650, 50);
         textPane.setBackground(Color.WHITE);
         textPane.setForeground(Color.BLACK);
         textPane.setFont(font);
@@ -90,10 +91,10 @@ public class QuizClient extends JFrame implements ActionListener {
         textPane.setText("Waiting for other player");
 
 
-        createButton(button1,"", 15, 100);
-        createButton(button2,"", 315, 100);
-        createButton(button3,"", 15, 350);
-        createButton(button4,"", 315, 350);
+        createButton(button1,"", 45, 100);
+        createButton(button2,"", 350, 100);
+        createButton(button3,"", 45, 350);
+        createButton(button4,"", 350, 350);
 
         for(JButton button: buttonList){
             add(button);
@@ -124,10 +125,10 @@ public class QuizClient extends JFrame implements ActionListener {
                     // server requests second player to initiate a new round
                     case SECOND_PLAYER_ROUND_START -> {
                         textPane.setText(readFromServer());
-                        button1.setText("yes");
-                        button2.setText("ready");
-                        button3.setText("sure thing");
-                        button4.setText("no");
+                        button1.setText("Yes");
+                        button2.setText("Ready");
+                        button3.setText("Sure thing");
+                        button4.setText("Let's go!");
                     }
                     // server reports first player score
                     case FIRST_PLAYER_SCORE -> {
@@ -138,7 +139,7 @@ public class QuizClient extends JFrame implements ActionListener {
                     // this to not overwrite the textfield displaying the score, before next round starts
                     case SECOND_PLAYER_SCORE -> {
                         textPane.setText(readFromServer());
-                        setAllButtonsText("ok");
+                        setAllButtonsText("Ok");
                     }
                     // the game is over
                     case GAME_ENDED -> {
@@ -232,9 +233,10 @@ public class QuizClient extends JFrame implements ActionListener {
     }
 
     private void createButton(JButton but, String butText, int x, int y){
-        but.setBounds(x, y, 300, 250);
+        but.setBounds(x, y, 250, 200);
         but.setFont(font);
         but.setBackground(buttonBackgroundColor);
+        but.setBorder(new MatteBorder(3,3,3,3,Color.WHITE));
         but.setFocusable(false);
         but.addActionListener(this);
         but.setText(butText);
