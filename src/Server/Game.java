@@ -102,13 +102,12 @@ public class Game extends Thread {
     public void sendSecondPlayerScore() throws IOException {
         secondPlayer.writeToClient(ServerInstruction.SECOND_PLAYER_SCORE.name());
         secondPlayer.writeToClient(getRoundAndTotalScoreMessage(secondPlayer, firstPlayer));
-
         secondPlayer.readFromClient();
     }
 
     private String getRoundAndTotalScoreMessage(Player activePlayer, Player passivePlayer) {
-        return "Round score: You: " + activePlayer.getRoundScore() + ". Opponent: "
-                + passivePlayer.getRoundScore() + ". Total score: You: " + activePlayer.getTotalScore() + ". Opponent: " + passivePlayer.getTotalScore();
+        return "Round score:    You: " + activePlayer.getRoundScore() + "    Opponent: "
+                + passivePlayer.getRoundScore() + "\\n Total score:    You: " + activePlayer.getTotalScore() + "    Opponent: " + passivePlayer.getTotalScore();
     }
 
     public boolean checkIfGameOver() {
@@ -117,8 +116,18 @@ public class Game extends Thread {
 
     public void writeEndMessage(Player player1, Player player2) {
         player1.writeToClient(ServerInstruction.GAME_ENDED.name());
-        player1.writeToClient("The game has ended. Your score was " + player1.getTotalScore() + ". Your opponent scored: "
+        player1.writeToClient("The game has ended. " + getWinOrLossString(player1, player2) + " \\nYour score was: " + player1.getTotalScore() + ". Your opponent scored: "
                 + player2.getTotalScore());
+    }
+
+    public String getWinOrLossString(Player firstPlayer, Player secondPlayer){
+        if(firstPlayer.getTotalScore()>secondPlayer.getTotalScore()){
+            return "You won the game! Good job!";
+        } else if(secondPlayer.getTotalScore()>firstPlayer.getTotalScore()){
+            return "Your opponent won! Better luck next time!";
+        } else {
+            return "You tied!";
+        }
     }
 
     private void flipPlayers() {

@@ -19,9 +19,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class QuizClient extends JFrame implements ActionListener {
-
 
     private JTextPane textPane = new JTextPane();
     private final List<JButton> buttonList = new ArrayList<>();
@@ -39,7 +37,6 @@ public class QuizClient extends JFrame implements ActionListener {
     private BufferedReader socketInput;
     private PrintWriter socketOutput;
 
-
     public QuizClient(String serverAddress, int portNr) {
         this.serverAddress = serverAddress;
         this.portNr = portNr;
@@ -55,7 +52,6 @@ public class QuizClient extends JFrame implements ActionListener {
         setResizable(false);
         setTitle("Quizkampen");
 
-
         //Styling för textpane-objekt
         StyledDocument doc = textPane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
@@ -63,13 +59,12 @@ public class QuizClient extends JFrame implements ActionListener {
         doc.setParagraphAttributes(2, doc.getLength(), center, false);
 
         //Här syns det vilken fråga i ronden man är på.
-        textPane.setBounds(0, 0, 645, 50);
+        textPane.setBounds(0, 0, 645, 60);
         textPane.setBackground(Color.WHITE);
         textPane.setForeground(Color.BLACK);
         textPane.setFont(font);
         textPane.setEditable(false);
         textPane.setText("Waiting for other player");
-
 
         createButton(button1,"", 45, 100);
         createButton(button2,"", 350, 100);
@@ -89,7 +84,7 @@ public class QuizClient extends JFrame implements ActionListener {
             String welcomeMessage = readFromServer();
             textPane.setText(welcomeMessage);
 
-            /**
+            /*
              * First message from server is always the ServerInstruction enum
              */
             while (true) {
@@ -116,13 +111,14 @@ public class QuizClient extends JFrame implements ActionListener {
                         setAllButtonsText("");
                     }
                     // server reports second player score and await input to start second player round,
-                    // this to not overwrite the textfield displaying the score, before next round starts
+                    // this to not overwrite the textPane displaying the score, before next round starts
                     case SECOND_PLAYER_SCORE -> {
                         textPane.setText(readFromServer());
                         setAllButtonsText("Ok");
                     }
                     // the game is over
                     case GAME_ENDED -> {
+
                         textPane.setText(readFromServer());
                         setAllButtonsText("");
                         System.out.println("gameover");
@@ -170,7 +166,6 @@ public class QuizClient extends JFrame implements ActionListener {
         client.play();
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -208,8 +203,9 @@ public class QuizClient extends JFrame implements ActionListener {
         this.socketOutput.println(message);
     }
 
+    //if message from server contains an explicit newline, it will be replaced with an actual newline.
     public String readFromServer() throws IOException {
-        return this.socketInput.readLine();
+        return this.socketInput.readLine().replace("\\n", "\n");
     }
 
     private void createButton(JButton but, String butText, int x, int y){
