@@ -170,14 +170,19 @@ public class QuizClient extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == button1) {
-                writeToServer(button1.getText());
+                writeToServerIfButtonNotEmpty(button1);
             } else if (e.getSource() == button2) {
-                writeToServer(button2.getText());
+                writeToServerIfButtonNotEmpty(button2);
             }  else if (e.getSource() == button3) {
-                writeToServer(button3.getText());
+                writeToServerIfButtonNotEmpty(button3);
             }  else if (e.getSource() == button4) {
-                writeToServer(button4.getText());
+                writeToServerIfButtonNotEmpty(button4);
             }
+    }
+
+    public void writeToServerIfButtonNotEmpty(JButton button) {
+        if(!button.getText().isEmpty())
+        writeToServer(button.getText());
     }
 
     private void setUpSocketCommunication() {
